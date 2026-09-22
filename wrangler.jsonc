@@ -1,0 +1,34 @@
+{
+  // Cloudflare Workers with static assets. The Astro Cloudflare adapter no
+  // longer targets Cloudflare Pages, so this project deploys as a Worker:
+  // static files are served from ./dist and the single server route
+  // (/api/chat) runs in the Worker entrypoint the adapter emits.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "menon-md",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // Create once with: npx wrangler kv namespace create CHAT_KV
+  // then paste the returned id below. Used only for chat rate limiting and Q&A logs.
+  "kv_namespaces": [
+    {
+      "binding": "CHAT_KV",
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+    }
+  ],
+  "vars": {
+    // Haiku-class model for the grounded CV chat. Override per environment if needed.
+    "CHAT_MODEL": "claude-haiku-4-5"
+  }
+  // ANTHROPIC_API_KEY is a secret, never a var:
+  //   npx wrangler secret put ANTHROPIC_API_KEY
+  // For local development put it in .dev.vars (gitignored).
+}

@@ -1,0 +1,398 @@
+# Single source of truth for menon.md.
+# Every surface (HTML, JSON-LD, llms.txt, llms-full.txt, cv.json, /plain, OG image,
+# chat grounding) is generated from this file at build time. No fact may appear on
+# the site that is not written here. No em dashes, en dashes or emoji: the build fails.
+# Dates: ISO strings (YYYY or YYYY-MM). An omitted `end` means present.
+
+meta:
+  lastUpdated: "2026-09-21"
+  metricsAsOf: "September 2026"
+
+identity:
+  givenName: Rejeesh
+  familyName: Menon
+  name: Rejeesh Menon
+  postNominal: MD
+  displayName: Rejeesh Menon, MD
+  alternateNames:
+    - Dr. Rejeesh Menon
+    - Rejeesh M. Menon
+    - R. Menon
+    - R. M. R. Menon
+  headline: Academic hospitalist and clinical AI physician-builder
+  subheadline: Clinical Assistant Professor, Elson S. Floyd College of Medicine, Washington State University
+  currentTitle: Attending Physician, Hospital Medicine, and Clinical Assistant Professor
+  employer:
+    name: Washington State University, Elson S. Floyd College of Medicine
+    shortName: Washington State University
+    url: https://medicine.wsu.edu/
+  location:
+    city: Richland
+    region: Washington
+    regionCode: WA
+    country: United States
+    countryCode: US
+  email: rejeeshmenon85@gmail.com
+  academicEmail: rejeesh.menon@wsu.edu
+  workAuthorization: U.S. permanent resident (EB-1A, Extraordinary Ability). No sponsorship required.
+  targets:
+    - Clinical AI evaluation and safety roles
+    - Medical director of clinical AI
+    - AI research faculty
+    - Technical cofounder
+
+summary: >-
+  Hospitalist and clinical assistant professor who also builds the software his
+  clinics run on. Ten years of inpatient medicine in U.S. community hospitals; a
+  translational research background that took an amino-acid formulation from the
+  Ussing chamber to a Nestle-licensed product; a seven-clinic dermatology group in
+  India that serves as a live environment for shipping and testing clinical software.
+  Builds with AI coding tools alongside a small engineering team and owns the clinical
+  logic, the human-in-the-loop boundaries, the safety rules for what generative output
+  may say to a patient, and the compliance decisions.
+
+links:
+  - id: wsu
+    label: WSU Faculty Profile
+    url: https://medicine.wsu.edu/directory/wsu-profile/rejeesh.menon/
+    primary: true
+  - id: scholar
+    label: Google Scholar
+    url: https://scholar.google.com/citations?user=vuCc7tQAAAAJ&hl=en
+    primary: true
+  - id: linkedin
+    label: LinkedIn
+    url: https://www.linkedin.com/in/rejeesh-menon/
+    primary: true
+  - id: dermavue
+    label: dermavue.com
+    url: https://dermavue.com
+    primary: true
+
+stats:
+  - value: "3"
+    label: clinical AI products
+    sublabel: shipped or in pilot, 2025 to 2026
+  - value: "7"
+    label: clinics running his software
+    sublabel: live deployment network, 100+ staff
+  - value: "10"
+    label: years attending
+    sublabel: hospital medicine
+  - value: "223"
+    label: citations
+    sublabel: h-index 6, Google Scholar, September 2026
+
+projects:
+  intro: >-
+    Each system was specified, built and shipped with AI-assisted development
+    (Claude Code CLI and agentic tooling) together with a small engineering team.
+    Rejeesh owns the clinical logic, the autonomy boundaries and the compliance decisions.
+  items:
+    - id: superhuman
+      name: SuperHuman
+      tagline: Clinical-intelligence tool for GLP-1 and metabolic care
+      status: In pilot, 2026
+      role: Designed and built
+      start: "2026"
+      stack:
+        - Next.js
+        - Supabase
+        - PostgreSQL
+        - Vultr
+        - AWS
+        - HIPAA-conscious architecture
+      bullets:
+        - Consolidates labs, wearable data and prescription history into physician-reviewed guidance.
+        - Author of the clinical logic and the autonomy boundary, meaning what the tool decides on its own and what requires physician sign-off.
+        - Every piece of generated guidance is checked against source data during the pilot.
+        - "Compliance decisions: BAA-covered data boundary, synthetic-data development, decision-support scoping outside FDA device rules."
+        - Piloting inside the DermaVue clinic network.
+    - id: clinic-os
+      name: DermaVue Clinic OS
+      tagline: Patient engagement and CRM platform
+      status: Live across seven clinics, 2025 to present
+      role: Built and shipped
+      start: "2025"
+      stack:
+        - NestJS
+        - Next.js
+        - Python
+        - Twenty CRM
+        - Chatwoot
+        - WhatsApp Business API
+        - Docker on Linux VPS
+      bullets:
+        - Patient messaging for all seven clinics across WhatsApp, Instagram and Facebook Messenger, with automatic lead qualification into one CRM.
+        - Designed the automated responder "Priya", including forbidden clinical topics and red-flag escalation rules, with live log review each release.
+        - Inbound lead integration via webhooks with clinic routing and de-duplication.
+    - id: commerce
+      name: DermaVue Commerce
+      tagline: Online store for the group's skincare line
+      status: Shipped, 2026
+      role: Built and shipped
+      start: "2026"
+      stack:
+        - Astro
+        - Vendure
+        - PostgreSQL
+      bullets:
+        - Search-optimized storefront with an ingredient database linking each product to the evidence behind its formulation.
+    - id: dermavue-web
+      name: dermavue.com
+      tagline: Public clinical web platform
+      status: Live
+      role: Built and maintains
+      start: "2017"
+      url: https://dermavue.com
+      stack:
+        - WordPress (PHP, hand-coded templates)
+        - Astro
+        - schema.org JSON-LD
+        - Search-indexing automation
+      bullets:
+        - Condition, procedure and location pages with hand-coded medical schema and answer-engine-oriented structure.
+
+clinical:
+  - id: pullman
+    title: Attending Physician, Hospital Medicine, and Clinical Assistant Professor
+    organization: Pullman Regional Hospital and WSU Elson S. Floyd College of Medicine
+    organizationUrl: https://medicine.wsu.edu/
+    location: Pullman, WA
+    start: "2022"
+    bullets:
+      - Full-scope adult inpatient medicine.
+      - Core teaching faculty for the internal medicine residency (Best Resident Teacher of the Year, 2024).
+      - Daily Epic, Meditech and Cerner user since 2013.
+  - id: lourdes
+    title: Hospitalist and Associate Director, Inpatient Rehabilitation Unit
+    organization: Lourdes Medical Center
+    location: Pasco, WA
+    start: "2019"
+    end: "2025"
+    bullets:
+      - Open-ICU community hospital medicine.
+      - Ran the inpatient rehabilitation unit and its care-transition and documentation processes.
+  - id: confluence
+    title: Hospitalist
+    organization: Confluence Health
+    location: Wenatchee and Moses Lake, WA
+    start: "2016"
+    end: "2019"
+    bullets: []
+  - id: chaplaincy
+    title: Hospice Physician (part-time)
+    organization: Chaplaincy Health Care
+    location: Richland, WA
+    start: "2022"
+    bullets: []
+
+ventures:
+  - id: dermavue
+    title: Co-Founder and Director
+    organization: DermaVue Skin & Hair Clinics
+    organizationUrl: https://dermavue.com
+    location: Kerala and Tamil Nadu, India
+    start: "2017"
+    bullets:
+      - Seven dermatology, cosmetology, hair-restoration and laser clinics (Thiruvananthapuram, Kollam, Thiruvalla, Kottayam, Kochi, Thrissur, Coimbatore).
+      - 100+ clinicians and staff; 7,200+ public patient reviews.
+      - Strategy, clinical standards, product and technology; software built in-house under his direction.
+      - "Medical Director of the SuperHuman Program: physician-supervised GLP-1 metabolic-health protocols with Indian BMI eligibility thresholds."
+  - id: ebc
+    title: Co-Founder and Director
+    organization: EBC Pharmaceuticals
+    location: India
+    start: "2017"
+    bullets:
+      - Specialty pharma serving orthopedic, rheumatology and dermatology prescribers.
+
+research:
+  narrative: >-
+    Postdoctoral research scholar at the University of Florida (2011 to 2013). The
+    team's intestinal-transport work produced enterade, an amino-acid rehydration
+    formulation funded by NASA/NSBRI, licensed worldwide to Nestle Health Science
+    (2018), and studied at Harvard, Dana-Farber, the U.S. Army and the University of
+    Kentucky. Co-investigator on the first randomized trial in chikungunya arthritis
+    (120 patients, GCP conditions), now cited in UpToDate and national guidelines.
+  positions:
+    - id: uf
+      title: Postdoctoral Research Scholar
+      organization: University of Florida, Department of Radiation Oncology
+      location: Gainesville, FL
+      start: "2011"
+      end: "2013"
+      bullets:
+        - Intestinal nutrient-electrolyte transport after radiation and chemotherapy; work that led to the amino-acid formulation enterade.
+        - Ussing-chamber electrophysiology, radioisotope flux, confocal microscopy and immunohistochemistry.
+  metrics:
+    citations: 223
+    hIndex: 6
+    i10Index: 6
+    citationsSince2021: 96
+    source: Google Scholar
+    asOf: September 2026
+    url: https://scholar.google.com/citations?user=vuCc7tQAAAAJ&hl=en
+
+publications:
+  - id: kanu-2024
+    authors: Kanu EO, Kim DK, Menon R, Burke C, Vicknair N
+    title: "Euglycemic ketoacidosis after the addition of a glucagon-like peptide-1 receptor agonist: a case report"
+    journal: "Annals of Internal Medicine: Clinical Cases"
+    year: 2024
+    volume: "3"
+    issue: "6"
+    pages: e230565
+    doi: 10.7326/aimcc.2023.0565
+    citations: 5
+  - id: yin-2014
+    authors: Yin L, Vijaygopal P, MacGregor GG, Menon R, et al.
+    title: Glucose stimulates calcium-activated chloride secretion in small intestinal cells
+    journal: American Journal of Physiology - Cell Physiology
+    year: 2014
+    volume: "306"
+    issue: "7"
+    pages: C687-C696
+    pmid: "24477233"
+    doi: 10.1152/ajpcell.00174.2013
+    citations: 44
+    note: F1000Prime recommended
+  - id: padmakumar-2009
+    authors: Padmakumar B, Jayan JB, Menon RMR, et al.
+    title: "Comparative evaluation of four therapeutic regimes in chikungunya arthritis: a prospective randomized parallel-group study"
+    journal: Indian Journal of Rheumatology
+    year: 2009
+    volume: "4"
+    issue: "3"
+    pages: 94-101
+    doi: 10.1016/S0973-3698(10)60189-6
+    citations: 70
+    note: First randomized trial in chikungunya arthritis; equal contribution
+
+teaching:
+  - id: wsu-faculty
+    title: Clinical Assistant Professor
+    organization: Elson S. Floyd College of Medicine, Washington State University
+    start: "2022"
+  - id: pnwu
+    title: Adjunct Clinical Faculty
+    organization: Pacific Northwest University of Health Sciences
+    start: "2018"
+  - id: editorial
+    title: Editorial board member
+    organization: Three medical journals
+  - id: reviewer
+    title: Ad hoc reviewer
+    organization: Journal of General Internal Medicine; International Journal of Clinical Practice
+  - id: acp-judge
+    title: Abstract judge
+    organization: American College of Physicians Internal Medicine Meeting
+    start: "2019"
+    end: "2019"
+
+skills:
+  - name: AI-assisted development
+    items:
+      - Claude Code CLI
+      - Agentic workflows
+  - name: Software
+    items:
+      - TypeScript and Node (Next.js, NestJS, Astro)
+      - PHP (WordPress)
+      - Python
+      - PostgreSQL
+      - Docker
+      - Linux VPS (Hetzner, Vultr)
+      - AWS
+  - name: Health data and compliance
+    items:
+      - HL7 FHIR R4 and SMART on FHIR
+      - HIPAA program design (BAA boundaries, synthetic-data development, decision-support scoping outside FDA device rules)
+      - Twenty CRM, Chatwoot, WhatsApp Business API
+  - name: Clinical systems (daily attending user)
+    items:
+      - Epic (2013 to present)
+      - Meditech (2016 to present)
+      - Cerner (2018 to 2021)
+  - name: Research methods
+    items:
+      - Ussing-chamber electrophysiology
+      - Ion-transport and radioisotope flux studies
+      - Confocal microscopy
+      - Immunohistochemistry
+      - BrdU labeling
+      - SPSS
+      - Origin
+
+education:
+  - id: und
+    degree: Residency, Internal Medicine
+    institution: University of North Dakota
+    location: Fargo, ND
+    start: "2013"
+    end: "2016"
+  - id: uf
+    degree: Postdoctoral Research Scholar, Radiation Oncology
+    institution: University of Florida
+    location: Gainesville, FL
+    start: "2011"
+    end: "2013"
+  - id: tdmc
+    degree: MBBS
+    institution: T.D. Medical College, University of Kerala
+    location: Alappuzha, India
+    start: "2003"
+    end: "2009"
+    note: Rotating internship 2008 to 2009
+
+credentials:
+  boards:
+    - name: American Board of Internal Medicine
+      field: Internal Medicine
+      year: 2016
+      verifyUrl: https://www.abim.org/verify-physician/
+  certifications:
+    - name: ECFMG Certification
+      year: 2012
+      verifyUrl: https://www.ecfmg.org/
+  licenses:
+    - state: Washington
+      stateCode: WA
+      status: Active
+      authority: Washington Medical Commission
+      verifyUrl: https://fortress.wa.gov/doh/providercredentialsearch/
+    - state: Oregon
+      stateCode: OR
+      status: Active
+      authority: Oregon Medical Board
+      verifyUrl: https://omb.oregon.gov/search
+    - state: California
+      stateCode: CA
+      status: Active
+      authority: Medical Board of California
+      verifyUrl: https://search.dca.ca.gov/
+
+honors:
+  - title: Best Resident Teacher of the Year
+    organization: WSU Pullman Internal Medicine Residency
+    year: 2024
+  - title: U.S. permanent residence in the EB-1A Extraordinary Ability classification
+    note: Granted on documented original contributions, publications and citations, and editorial and judging service.
+  - title: F1000Prime recommendation
+    organization: F1000Prime
+    year: 2014
+    note: For Am J Physiol Cell Physiol 2014;306:C687-C696.
+  - title: NSBRI SMARTCAP team award
+    organization: National Space Biomedical Research Institute
+    year: 2012
+  - title: Celebration of Excellence
+    organization: UF Shands Cancer Center
+    year: 2012
+
+chat:
+  starters:
+    - Why is Rejeesh a fit for a medical director of clinical AI role?
+    - How was safety designed into SuperHuman?
+    - What is his research record?
+    - How does the seven-clinic deployment work in practice?
+  fallback: "That's not in my CV, ask Rejeesh directly at rejeeshmenon85@gmail.com"
