@@ -5,7 +5,7 @@
   // (/api/chat) runs in the Worker entrypoint the adapter emits.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "menon-md",
-  "main": "./dist/_worker.js/index.js",
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {

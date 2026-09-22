@@ -1,0 +1,774 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens. Light is the default; dark answers prefers-color-scheme
+   only. Contrast checked against DESIGN.md (body >= 4.5:1 both schemes).
+   ------------------------------------------------------------------ */
+:root {
+  --paper: #ffffff;
+  --ink: #14181f;
+  --navy: #1f3a5f;
+  --navy-hover: #162b47;
+  --gold: #8a6a24;
+  --muted: #4f5864;
+  --hairline: #e3e6ea;
+  --tint: #f5f7fa;
+  --focus: #1f3a5f;
+
+  --font-serif: Georgia, "Times New Roman", Times, serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --step--1: 0.85rem;
+  --step-0: 1rem;
+  --step-1: 1.15rem;
+  --step-2: 1.4rem;
+  --step-3: 1.8rem;
+  --step-4: clamp(2.2rem, 1.6rem + 2vw, 3rem);
+  --measure: 72ch;
+  --shell: 76rem;
+  --nav-h: 3rem;
+
+  --z-nav: 10;
+  --z-launcher: 20;
+  --z-widget: 30;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0e1420;
+    --ink: #ede8df;
+    --navy: #8fb2de;
+    --navy-hover: #b3cceb;
+    --gold: #d2b36a;
+    --muted: #a3acba;
+    --hairline: #25314a;
+    --tint: #141c2b;
+    --focus: #8fb2de;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-gold: var(--gold);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-tint: var(--tint);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 106.25%; /* 17px */
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
+}
+
+@media (max-width: 40rem) {
+  html {
+    font-size: 100%;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.15;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--step-4);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: var(--step-3);
+}
+
+h3 {
+  font-size: var(--step-1);
+  color: var(--ink);
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in oklab, var(--navy) 45%, transparent);
+  transition: color 150ms cubic-bezier(0.22, 1, 0.36, 1), text-decoration-color 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a:hover {
+  color: var(--navy-hover);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+li {
+  margin: 0.25rem 0;
+}
+
+address {
+  font-style: normal;
+}
+
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+.shell {
+  width: min(100% - 2rem, var(--shell));
+  margin-inline: auto;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--paper);
+  color: var(--navy);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--hairline);
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* ------------------------------------------------------------------
+   Nav
+   ------------------------------------------------------------------ */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background: var(--paper);
+  border-bottom: 1px solid var(--hairline);
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+}
+
+.site-nav .shell {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.site-nav .brand {
+  font-family: var(--font-serif);
+  color: var(--navy);
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: var(--step-0);
+}
+
+.site-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  font-size: var(--step--1);
+}
+
+.site-nav ul::-webkit-scrollbar {
+  display: none;
+}
+
+.site-nav li {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.site-nav a.section-link {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color 150ms cubic-bezier(0.22, 1, 0.36, 1), border-color 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-nav a.section-link:hover,
+.site-nav a.section-link[aria-current="true"] {
+  color: var(--navy);
+  border-bottom-color: var(--gold);
+}
+
+/* ------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------ */
+.hero {
+  padding: clamp(2.5rem, 4vw, 4.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.hero .name-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em;
+}
+
+.hero .degree {
+  font-family: var(--font-serif);
+  font-size: calc(var(--step-4) * 0.62);
+  color: var(--muted);
+}
+
+.hero .headline {
+  font-size: var(--step-2);
+  font-family: var(--font-serif);
+  color: var(--ink);
+  margin: 1rem 0 0.35rem;
+  line-height: 1.3;
+}
+
+.hero .subheadline {
+  font-size: var(--step-0);
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.hero address {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.hero address span + span::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+.hero .authorization {
+  font-size: var(--step--1);
+  margin: 0.35rem 0 0;
+}
+
+.hero .profiles {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  font-size: var(--step--1);
+}
+
+.hero .profiles li {
+  margin: 0;
+}
+
+.hero .summary {
+  margin-top: 1.75rem;
+  font-size: var(--step-0);
+}
+
+/* ------------------------------------------------------------------
+   Stat tiles: hairline cells, no icons, no fills
+   ------------------------------------------------------------------ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  margin: 1rem 0 0;
+}
+
+.stats > div {
+  padding: 1.25rem 1.25rem 1.25rem 0;
+  border-left: 1px solid var(--hairline);
+  padding-left: 1.25rem;
+}
+
+.stats > div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+@media (max-width: 40rem) {
+  .stats > div:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .stats > div:nth-child(4) {
+    border-top: 1px solid var(--hairline);
+  }
+}
+
+.stats .value {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats .label {
+  margin-top: 0.4rem;
+  font-size: var(--step-0);
+  color: var(--ink);
+}
+
+.stats .sublabel {
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+/* ------------------------------------------------------------------
+   Sections: a gold hairline, then the printed-CV running head. On wide
+   screens the small-caps label sits in a left margin column and the
+   heading plus body share the right column; on narrow screens the label
+   sits inline above the heading.
+   ------------------------------------------------------------------ */
+.cv-section {
+  margin-top: clamp(2.5rem, 4vw, 4rem);
+  border-top: 1px solid var(--gold);
+  padding-top: 1.1rem;
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+
+.section-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  color: var(--gold);
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+.section-body > h2 {
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 64rem) {
+  .cv-section {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 1.5rem;
+    align-items: start;
+  }
+  .section-label {
+    /* align with the h2 baseline */
+    padding-top: 0.55rem;
+    margin-bottom: 0;
+  }
+}
+
+.section-intro {
+  color: var(--muted);
+  max-width: var(--measure);
+}
+
+/* ------------------------------------------------------------------
+   Entries (roles, projects)
+   ------------------------------------------------------------------ */
+.entry {
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--hairline);
+  max-width: var(--measure);
+}
+
+.entry:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+}
+
+.entry-when {
+  color: var(--muted);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+.entry-meta {
+  color: var(--muted);
+  margin: 0.15rem 0 0.5rem;
+  font-size: var(--step--1);
+}
+
+.entry-meta a {
+  color: inherit;
+}
+
+.entry ul {
+  margin-top: 0.4rem;
+}
+
+.stack {
+  margin: 0.35rem 0 0.5rem;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.stack dt {
+  display: inline;
+}
+
+.stack dd {
+  display: inline;
+  margin: 0;
+}
+
+.role-tag {
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------------
+   Publications
+   ------------------------------------------------------------------ */
+.publications {
+  padding-left: 1.4rem;
+  max-width: var(--measure);
+}
+
+.publications li {
+  margin: 0.75rem 0;
+}
+
+.publications .ids {
+  display: block;
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.publications .ids a {
+  color: var(--muted);
+}
+
+.publications .ids a:hover {
+  color: var(--navy);
+}
+
+.metrics {
+  border: 1px solid var(--hairline);
+  padding: 0.85rem 1rem;
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin: 1.25rem 0 1.5rem;
+}
+
+.metrics strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------
+   Lists: teaching, skills, education, credentials, honors
+   ------------------------------------------------------------------ */
+.plain-list {
+  list-style: none;
+  padding: 0;
+  max-width: var(--measure);
+}
+
+.plain-list li {
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+
+.plain-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.plain-list .when {
+  color: var(--muted);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 2rem;
+  max-width: var(--measure);
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .skills {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+}
+
+.skills dt {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.skills dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+@media (max-width: 47.99rem) {
+  .skills dd {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.credentials h3 {
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.verify {
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------
+   Footer and chat launcher
+   ------------------------------------------------------------------ */
+.site-footer {
+  margin-top: clamp(3rem, 5vw, 5rem);
+  padding: 1.5rem 0 5rem;
+  border-top: 1px solid var(--hairline);
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.site-footer ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.site-footer li {
+  margin: 0;
+}
+
+.chat-launcher {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: var(--z-launcher);
+  background: var(--paper);
+  color: var(--navy);
+  border: 1px solid var(--hairline);
+  padding: 0.6rem 0.9rem;
+  font: inherit;
+  font-size: var(--step--1);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 0 var(--hairline);
+}
+
+.chat-launcher:hover {
+  border-color: var(--navy);
+}
+
+/* ------------------------------------------------------------------
+   Audience banner (/for/[slug])
+   ------------------------------------------------------------------ */
+.audience-banner {
+  border: 1px solid var(--hairline);
+  background: var(--tint);
+  padding: 1.25rem 1.5rem;
+  max-width: var(--measure);
+  margin: 0 0 1.5rem;
+}
+
+.audience-banner h2 {
+  font-size: var(--step-2);
+  margin-bottom: 0.25rem;
+}
+
+.audience-banner .disclosure {
+  color: var(--muted);
+  font-size: var(--step--1);
+  margin: 0.75rem 0 0;
+}
+
+/* ------------------------------------------------------------------
+   Motion preferences
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Print: a clean paper CV. Black on white, nav and chat hidden,
+   primary profile URLs shown.
+   ------------------------------------------------------------------ */
+@media print {
+  :root {
+    --paper: #ffffff;
+    --ink: #000000;
+    --navy: #000000;
+    --navy-hover: #000000;
+    --gold: #444444;
+    --muted: #333333;
+    --hairline: #999999;
+    --tint: #ffffff;
+  }
+
+  @page {
+    margin: 1.6cm;
+  }
+
+  html {
+    font-size: 10.5pt;
+    line-height: 1.4;
+  }
+
+  .site-nav,
+  .chat-launcher,
+  .skip-link,
+  .no-print,
+  #chat-widget {
+    display: none !important;
+  }
+
+  .shell {
+    width: 100%;
+  }
+
+  .hero {
+    padding: 0 0 0.8cm;
+  }
+
+  .cv-section {
+    padding-top: 0.7cm;
+    break-inside: auto;
+  }
+
+  .cv-section {
+    display: block;
+    padding-top: 0.4rem;
+  }
+
+  .section-body > h2 {
+    margin-bottom: 0.5rem;
+    break-after: avoid;
+  }
+
+  .entry,
+  .publications li,
+  .plain-list li {
+    break-inside: avoid;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: none;
+  }
+
+  .hero .profiles a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #333333;
+  }
+
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stats .value {
+    font-size: 1.6rem;
+  }
+}

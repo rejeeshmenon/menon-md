@@ -1,0 +1,17 @@
+---
+import { cv } from '../lib/cv';
+---
+
+<section class="shell" aria-label="At a glance">
+  <div class="stats">
+    {
+      cv.stats.map((s) => (
+        <div>
+          <div class="value">{s.value}</div>
+          <div class="label">{s.label}</div>
+          <div class="sublabel">{s.sublabel}</div>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+import type { SectionDef } from '../lib/markdown';
+import SectionHeading from './SectionHeading.astro';
+import ClinicalAi from './sections/ClinicalAi.astro';
+import ClinicalPractice from './sections/ClinicalPractice.astro';
+import Entrepreneurship from './sections/Entrepreneurship.astro';
+import Research from './sections/Research.astro';
+import Teaching from './sections/Teaching.astro';
+import Technical from './sections/Technical.astro';
+import Education from './sections/Education.astro';
+import Honors from './sections/Honors.astro';
+
+interface Props {
+  sections: readonly SectionDef[];
+}
+const { sections } = Astro.props;
+
+const registry = {
+  'clinical-ai': ClinicalAi,
+  'clinical-practice': ClinicalPractice,
+  entrepreneurship: Entrepreneurship,
+  research: Research,
+  teaching: Teaching,
+  technical: Technical,
+  education: Education,
+  honors: Honors,
+} as const;
+
+type RegistryId = keyof typeof registry;
+---
+
+{
+  sections.map((s) => {
+    const Body = registry[s.id as RegistryId];
+    if (!Body) throw new Error(`No component registered for section "${s.id}"`);
+    return (
+      <section class="cv-section shell" id={s.id} aria-labelledby={`${s.id}-title`}>
+        <span class="section-label" aria-hidden="true">
+          {s.short}
+        </span>
+        <div class="section-body">
+          <SectionHeading section={s} />
+          <Body />
+        </div>
+      </section>
+    );
+  })
+}

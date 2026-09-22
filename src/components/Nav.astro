@@ -1,0 +1,66 @@
+---
+import { cv } from '../lib/cv';
+import type { SectionDef } from '../lib/markdown';
+
+interface Props {
+  sections: readonly SectionDef[];
+}
+const { sections } = Astro.props;
+---
+
+<nav class="site-nav" aria-label="Sections">
+  <div class="shell">
+    <a class="brand" href="#top">{cv.identity.displayName}</a>
+    <ul>
+      {
+        sections.map((s) => (
+          <li>
+            <a class="section-link" href={`#${s.id}`} data-section={s.id}>
+              {s.short}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<!-- Progressive enhancement: highlight the section in view. Under 1 KB, no dependencies. -->
+<script is:inline>
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    // The nav renders before the sections, so wait for the document to finish parsing.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    function init() {
+    var links = document.querySelectorAll('.site-nav a[data-section]');
+    if (!links.length) return;
+    var map = {};
+    links.forEach(function (a) {
+      map[a.getAttribute('data-section')] = a;
+    });
+    var current = null;
+    function set(id) {
+      if (current === id) return;
+      if (current && map[current]) map[current].removeAttribute('aria-current');
+      if (map[id]) map[id].setAttribute('aria-current', 'true');
+      current = id;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) set(e.target.id);
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+    );
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+    }
+  })();
+</script>

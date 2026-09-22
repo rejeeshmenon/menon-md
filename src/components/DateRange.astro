@@ -1,0 +1,19 @@
+---
+interface Props {
+  start: string;
+  end?: string | undefined;
+}
+const { start, end } = Astro.props;
+const s = start.slice(0, 4);
+const e = end ? end.slice(0, 4) : undefined;
+---
+
+{
+  !e ? (
+    <span class="entry-when"><time datetime={start}>{s}</time> to present</span>
+  ) : s === e ? (
+    <span class="entry-when"><time datetime={start}>{s}</time></span>
+  ) : (
+    <span class="entry-when"><time datetime={start}>{s}</time> to <time datetime={end}>{e}</time></span>
+  )
+}

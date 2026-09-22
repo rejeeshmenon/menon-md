@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import StatTiles from '../components/StatTiles.astro';
+import CvBody from '../components/CvBody.astro';
+import { cv } from '../lib/cv';
+import { SECTION_ORDER } from '../lib/markdown';
+import { metaDescription, pageTitle } from '../lib/seo';
+---
+
+<Base title={pageTitle(cv)} description={metaDescription(cv)} path="/" jsonLd navSections={SECTION_ORDER}>
+  <Hero />
+  <main id="main">
+    <StatTiles />
+    <CvBody sections={SECTION_ORDER} />
+  </main>
+</Base>

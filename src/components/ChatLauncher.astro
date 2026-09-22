@@ -1,0 +1,36 @@
+---
+interface Props {
+  audience?: string | undefined;
+}
+const { audience } = Astro.props;
+const href = audience ? `/chat?for=${encodeURIComponent(audience)}` : '/chat';
+---
+
+<!-- With JavaScript off this is a plain link to /chat. With JavaScript on, the
+     first click lazy-loads /chat-widget.js; no chat code ships in the page. -->
+<a class="chat-launcher no-print" href={href} data-chat-launcher data-audience={audience}>Ask about my work</a>
+<script is:inline>
+  (function () {
+    var btn = document.querySelector('[data-chat-launcher]');
+    if (!btn) return;
+    btn.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (window.__cvChatOpen) {
+        window.__cvChatOpen();
+        return;
+      }
+      btn.setAttribute('aria-busy', 'true');
+      var s = document.createElement('script');
+      s.src = '/chat-widget.js';
+      s.defer = true;
+      s.onload = function () {
+        btn.removeAttribute('aria-busy');
+        if (window.__cvChatOpen) window.__cvChatOpen();
+      };
+      s.onerror = function () {
+        window.location.href = btn.getAttribute('href');
+      };
+      document.head.appendChild(s);
+    });
+  })();
+</script>

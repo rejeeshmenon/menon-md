@@ -10,18 +10,20 @@ import { type Cv, type CvPublication, type CvRole, doiUrl, formatRange, pmidUrl 
 export interface SectionDef {
   id: string;
   title: string;
+  /** Short running head used in the nav and the printed-CV margin label. */
+  short: string;
 }
 
 /** Canonical order and ids of the CV sections. HTML anchors use these ids. */
 export const SECTION_ORDER: readonly SectionDef[] = [
-  { id: 'clinical-ai', title: 'Clinical AI and Software' },
-  { id: 'clinical-practice', title: 'Clinical Practice' },
-  { id: 'entrepreneurship', title: 'Entrepreneurship' },
-  { id: 'research', title: 'Research' },
-  { id: 'teaching', title: 'Teaching and Academic Service' },
-  { id: 'technical', title: 'Technical Capabilities' },
-  { id: 'education', title: 'Education and Credentials' },
-  { id: 'honors', title: 'Honors' },
+  { id: 'clinical-ai', title: 'Clinical AI and Software', short: 'Software' },
+  { id: 'clinical-practice', title: 'Clinical Practice', short: 'Practice' },
+  { id: 'entrepreneurship', title: 'Entrepreneurship', short: 'Ventures' },
+  { id: 'research', title: 'Research', short: 'Research' },
+  { id: 'teaching', title: 'Teaching and Academic Service', short: 'Teaching' },
+  { id: 'technical', title: 'Technical Capabilities', short: 'Capabilities' },
+  { id: 'education', title: 'Education and Credentials', short: 'Credentials' },
+  { id: 'honors', title: 'Honors', short: 'Honors' },
 ] as const;
 
 export type SectionId = (typeof SECTION_ORDER)[number]['id'];

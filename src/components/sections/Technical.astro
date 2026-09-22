@@ -1,0 +1,14 @@
+---
+import { cv } from '../../lib/cv';
+---
+
+<dl class="skills">
+  {
+    cv.skills.map((g) => (
+      <>
+        <dt>{g.name}</dt>
+        <dd>{g.items.join('; ')}</dd>
+      </>
+    ))
+  }
+</dl>

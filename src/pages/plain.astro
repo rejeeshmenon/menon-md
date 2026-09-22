@@ -1,0 +1,145 @@
+---
+/**
+ * /plain: semantic HTML only. A few lines of CSS for legibility, no JavaScript,
+ * no layout. Built for ATS parsers, text browsers and screen readers.
+ */
+import { cv, doiUrl, formatRange, pmidUrl } from '../lib/cv';
+import { SECTION_ORDER, formatCitation } from '../lib/markdown';
+import { metaDescription } from '../lib/seo';
+import { SITE } from '../lib/site';
+
+const id = cv.identity;
+const m = cv.research.metrics;
+const c = cv.credentials;
+const t = (sid: string) => SECTION_ORDER.find((s) => s.id === sid)!.title;
+---
+
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{id.displayName}: curriculum vitae (plain)</title>
+    <meta name="description" content={metaDescription(cv, 160)} />
+    <link rel="canonical" href={`${SITE.url}/plain`} />
+    <link rel="alternate" type="text/markdown" href="/llms-full.txt" />
+    <meta name="color-scheme" content="light dark" />
+    <style is:global>
+      body { font-family: Georgia, serif; max-width: 72ch; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      h1, h2, h3 { font-weight: normal; }
+      @media print { a::after { content: " (" attr(href) ")"; font-size: 0.85em; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>{id.displayName}</h1>
+      <p>{id.headline}. {id.subheadline}.</p>
+      <address>
+        {id.location.city}, {id.location.region}, {id.location.country}.
+        <a href={`mailto:${id.email}`}>{id.email}</a>, <a href={`mailto:${id.academicEmail}`}>{id.academicEmail}</a>.
+        {id.workAuthorization}
+      </address>
+      <ul>
+        {cv.links.map((l) => <li><a href={l.url}>{l.label}</a></li>)}
+      </ul>
+      <p><a href="/">Formatted version</a></p>
+    </header>
+    <main>
+      <h2>Summary</h2>
+      <p>{cv.summary}</p>
+      <p>Target roles: {id.targets.join('; ')}.</p>
+
+      <h2 id="clinical-ai">{t('clinical-ai')}</h2>
+      <p>{cv.projects.intro}</p>
+      {
+        cv.projects.items.map((p) => (
+          <section>
+            <h3>{p.name}: {p.tagline}</h3>
+            <p>Status: {p.status}. Role: {p.role}. Stack: {p.stack.join(', ')}.{p.url && <span> URL: <a href={p.url}>{p.url}</a></span>}</p>
+            <ul>{p.bullets.map((b) => <li>{b}</li>)}</ul>
+          </section>
+        ))
+      }
+
+      <h2 id="clinical-practice">{t('clinical-practice')}</h2>
+      {
+        cv.clinical.map((r) => (
+          <section>
+            <h3>{r.title}</h3>
+            <p>{r.organization}, {r.location}. {formatRange(r.start, r.end)}.</p>
+            {r.bullets.length > 0 && <ul>{r.bullets.map((b) => <li>{b}</li>)}</ul>}
+          </section>
+        ))
+      }
+
+      <h2 id="entrepreneurship">{t('entrepreneurship')}</h2>
+      {
+        cv.ventures.map((r) => (
+          <section>
+            <h3>{r.title}, {r.organization}</h3>
+            <p>{r.location}. {formatRange(r.start, r.end)}.</p>
+            <ul>{r.bullets.map((b) => <li>{b}</li>)}</ul>
+          </section>
+        ))
+      }
+
+      <h2 id="research">{t('research')}</h2>
+      <p>{cv.research.narrative}</p>
+      {
+        cv.research.positions.map((r) => (
+          <section>
+            <h3>{r.title}</h3>
+            <p>{r.organization}, {r.location}. {formatRange(r.start, r.end)}.</p>
+            <ul>{r.bullets.map((b) => <li>{b}</li>)}</ul>
+          </section>
+        ))
+      }
+      <p>
+        {m.citations} citations, h-index {m.hIndex}, i10-index {m.i10Index}, {m.citationsSince2021} citations since 2021 (<a href={m.url}>{m.source}</a>, {m.asOf}).
+      </p>
+      <h3>Selected publications</h3>
+      <ol>
+        {
+          cv.publications.map((p) => (
+            <li>
+              {formatCitation(p)}
+              {p.doi && <span> <a href={doiUrl(p.doi)}>doi:{p.doi}</a>.</span>}
+              {p.pmid && <span> <a href={pmidUrl(p.pmid)}>PMID {p.pmid}</a>.</span>}
+              {p.citations !== undefined && <span> {p.citations} citations.</span>}
+              {p.note && <span> {p.note}.</span>}
+            </li>
+          ))
+        }
+      </ol>
+
+      <h2 id="teaching">{t('teaching')}</h2>
+      <ul>
+        {cv.teaching.map((x) => <li>{x.title}, {x.organization}{x.start ? ` (${formatRange(x.start, x.end)})` : ''}.</li>)}
+      </ul>
+
+      <h2 id="technical">{t('technical')}</h2>
+      <dl>
+        {cv.skills.map((g) => <><dt>{g.name}</dt><dd>{g.items.join('; ')}</dd></>)}
+      </dl>
+
+      <h2 id="education">{t('education')}</h2>
+      <ul>
+        {cv.education.map((e) => <li>{e.degree}, {e.institution}, {e.location} ({formatRange(e.start, e.end)}).{e.note ? ` ${e.note}.` : ''}</li>)}
+      </ul>
+      <h3>Board certification and licensure</h3>
+      <ul>
+        {c.boards.map((b) => <li>{b.name}, {b.field} ({b.year}). <a href={b.verifyUrl}>Verify</a></li>)}
+        {c.certifications.map((x) => <li>{x.name} ({x.year}).{x.verifyUrl && <span> <a href={x.verifyUrl}>Source</a></span>}</li>)}
+        {c.licenses.map((l) => <li>{l.state} physician license ({l.status.toLowerCase()}), {l.authority}. <a href={l.verifyUrl}>Verify</a></li>)}
+      </ul>
+
+      <h2 id="honors">{t('honors')}</h2>
+      <ul>
+        {cv.honors.map((h) => <li>{h.title}{h.organization ? `, ${h.organization}` : ''}{h.year ? ` (${h.year})` : ''}.{h.note ? ` ${h.note}` : ''}</li>)}
+      </ul>
+    </main>
+    <footer>
+      <p>Last updated {cv.meta.lastUpdated}. Also available as <a href="/llms-full.txt">markdown</a> and <a href="/cv.json">JSON Resume</a>.</p>
+    </footer>
+  </body>
+</html>

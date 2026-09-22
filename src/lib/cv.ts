@@ -11,7 +11,7 @@ import { findForbidden, locate } from './text';
 import rawCv from '../content/cv.yaml?raw';
 
 const isoDate = z.string().regex(/^\d{4}(-\d{2})?(-\d{2})?$/, 'expected YYYY, YYYY-MM or YYYY-MM-DD');
-const url = z.string().url();
+const url = z.url();
 const nonEmpty = z.string().trim().min(1);
 
 const linkSchema = z.object({
@@ -118,8 +118,8 @@ export const cvSchema = z.object({
       country: nonEmpty,
       countryCode: z.string().length(2),
     }),
-    email: z.string().email(),
-    academicEmail: z.string().email(),
+    email: z.email(),
+    academicEmail: z.email(),
     workAuthorization: nonEmpty,
     targets: z.array(nonEmpty).min(1),
   }),

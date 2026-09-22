@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { cv } from '../lib/cv';
+import { audiences } from '../lib/audiences';
+import { pageTitle } from '../lib/seo';
+
+const id = cv.identity;
+const starters = cv.chat.starters;
+// /chat?for=<slug> is read client-side; the set of valid slugs is embedded so
+// the widget only forwards known audiences.
+const validSlugs = audiences.map((a) => a.slug);
+---
+
+<Base
+  title={pageTitle(cv, 'Ask about my work')}
+  description={`Ask questions about the professional background of ${id.displayName}. Answers come only from the CV and cite its sections.`}
+  path="/chat"
+  hideLauncher
+>
+  <main id="main" class="shell chat-page">
+    <div class="prose">
+      <h1>Ask about my work</h1>
+      <p class="muted">
+        An experimental assistant grounded only on this CV. It cites the CV section for every claim, declines anything
+        the CV does not say, and does not give medical advice. Up to 8 turns and 10 messages per hour.
+      </p>
+      <p><a href="/">Back to the CV</a></p>
+    </div>
+    <noscript>
+      <div class="audience-banner">
+        <p>
+          The chat needs JavaScript. Without it, the fastest route is email: <a href={`mailto:${id.email}`}>{id.email}</a>.
+          The full CV is also available as <a href="/plain">plain HTML</a> and <a href="/llms-full.txt">markdown</a>.
+        </p>
+        <p>Questions people usually ask:</p>
+        <ul>
+          {starters.map((q) => <li>{q}</li>)}
+        </ul>
+      </div>
+    </noscript>
+    <div id="chat-mount" class="chat-mount"></div>
+    <script type="application/json" data-chat-starters set:html={JSON.stringify(starters)} />
+    <script type="application/json" data-chat-audiences set:html={JSON.stringify(validSlugs)} />
+  </main>
+</Base>
+
+<style>
+  .chat-page {
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+  }
+  .chat-mount:empty {
+    display: none;
+  }
+  .chat-mount {
+    max-width: 44rem;
+    height: min(36rem, calc(100dvh - 14rem));
+    display: flex;
+  }
+  .chat-mount :global(.cvchat) {
+    flex: 1;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var mount = document.getElementById('chat-mount');
+    var params = new URLSearchParams(window.location.search);
+    var slug = params.get('for');
+    var valid = [];
+    var starters = [];
+    try {
+      valid = JSON.parse(document.querySelector('[data-chat-audiences]').textContent) || [];
+      starters = JSON.parse(document.querySelector('[data-chat-starters]').textContent) || [];
+    } catch (e) {}
+    var s = document.createElement('script');
+    s.src = '/chat-widget.js';
+    s.defer = true;
+    s.onload = function () {
+      window.__cvChatMount(mount, { audience: valid.indexOf(slug) >= 0 ? slug : null, starters: starters });
+    };
+    document.head.appendChild(s);
+  })();
+</script>

@@ -14,6 +14,8 @@ export default defineConfig({
     inlineStylesheets: 'always',
   },
   compressHTML: true,
+  // No sessions: the site keeps no per-visitor state, so no SESSION KV binding.
+  session: false,
   adapter: cloudflare({
     imageService: 'compile',
   }),

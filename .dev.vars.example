@@ -1,4 +1,6 @@
 # Copy to .dev.vars (gitignored) for local development of /api/chat.
-# Never commit the real key. In production set it with:
+# Never commit the real key. In production set secrets with:
 #   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put IP_HASH_SALT   (optional)
 ANTHROPIC_API_KEY=sk-ant-REPLACE_ME
+IP_HASH_SALT=any-private-random-string

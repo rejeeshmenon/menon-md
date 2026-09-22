@@ -1,0 +1,22 @@
+# Audience page: AI startup looking for a physician technical cofounder.
+# Personalization may reorder sections and add three tailored bullets. It may
+# not add facts: every bullet below restates something already in cv.yaml.
+slug: ai-startup
+company: Clinical AI startup
+role: Technical Cofounder (Physician)
+greeting: Prepared for a clinical AI founding-team conversation
+emphasize:
+  - clinical-ai
+  - entrepreneurship
+  - technical
+  - clinical-practice
+bullets:
+  - Has already shipped three clinical products with AI-assisted development and a small engineering team, from spec to production, across a live seven-clinic network with 100+ staff.
+  - Co-founded and directs two healthcare companies in India, a seven-clinic dermatology group and a specialty pharma company, and uses the clinics as the pilot environment for new software.
+  - Practicing hospitalist and clinical assistant professor, so clinical credibility, regulatory judgment and product ownership sit in one person on the founding team.
+jdContext: >-
+  An early-stage clinical AI startup is looking for a physician cofounder who can
+  own clinical product decisions, safety and regulatory scoping, and also build.
+  The team values people who have shipped real software to real clinics, who
+  understand HIPAA and FDA decision-support boundaries in practice, and who can
+  recruit and stand in front of clinicians and investors.

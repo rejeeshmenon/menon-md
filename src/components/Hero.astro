@@ -1,0 +1,35 @@
+---
+import { cv } from '../lib/cv';
+
+const id = cv.identity;
+---
+
+<header class="hero" id="top">
+  <div class="shell">
+    <div class="prose">
+      <h1>{id.name}<span class="degree">, {id.postNominal}</span></h1>
+      <p class="headline">{id.headline}</p>
+      <p class="subheadline">{id.subheadline}</p>
+      <address>
+        <span>{id.location.city}, {id.location.region}</span>
+        <span><a href={`mailto:${id.email}`}>{id.email}</a></span>
+        <span><a href={`mailto:${id.academicEmail}`}>{id.academicEmail}</a></span>
+      </address>
+      <p class="authorization muted">{id.workAuthorization}</p>
+      <ul class="profiles" aria-label="Primary profiles">
+        {
+          cv.links
+            .filter((l) => l.primary)
+            .map((l) => (
+              <li>
+                <a href={l.url} rel="me noopener">
+                  {l.label}
+                </a>
+              </li>
+            ))
+        }
+      </ul>
+      <p class="summary">{cv.summary}</p>
+    </div>
+  </div>
+</header>

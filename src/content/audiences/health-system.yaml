@@ -1,0 +1,23 @@
+# Audience page: health-system medical director of clinical AI.
+# Personalization may reorder sections and add three tailored bullets. It may
+# not add facts: every bullet below restates something already in cv.yaml.
+slug: health-system
+company: Health system clinical AI office
+role: Medical Director of Clinical AI
+greeting: Prepared for a health-system clinical AI leadership search
+emphasize:
+  - clinical-ai
+  - clinical-practice
+  - teaching
+  - research
+bullets:
+  - Ten years of attending hospital medicine and daily Epic, Meditech and Cerner use, so AI is designed against real inpatient workflow rather than a model of it.
+  - Owns the autonomy boundary and the compliance decisions on SuperHuman, a clinical-intelligence tool in pilot, including what requires physician sign-off and the BAA and decision-support scoping calls.
+  - Ships and monitors production clinical software across seven clinics, including an automated patient responder with forbidden clinical topics and red-flag escalation reviewed each release.
+jdContext: >-
+  The role is a medical director of clinical AI at a multi-hospital health system.
+  It owns clinical governance for AI tools: evaluation before deployment, safety
+  rules for generative output, post-deployment monitoring, physician oversight
+  design, and coordination with compliance and informatics. It expects a practicing
+  physician who understands EHR workflow and can speak with engineers, data
+  scientists and frontline clinicians.

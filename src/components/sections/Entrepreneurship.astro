@@ -1,0 +1,18 @@
+---
+import { cv } from '../../lib/cv';
+import Entry from '../Entry.astro';
+---
+
+{
+  cv.ventures.map((r) => (
+    <Entry
+      title={r.title}
+      organization={r.organization}
+      organizationUrl={r.organizationUrl}
+      location={r.location}
+      start={r.start}
+      end={r.end}
+      bullets={r.bullets}
+    />
+  ))
+}

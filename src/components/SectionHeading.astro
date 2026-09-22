@@ -1,0 +1,10 @@
+---
+import type { SectionDef } from '../lib/markdown';
+
+interface Props {
+  section: SectionDef;
+}
+const { section } = Astro.props;
+---
+
+<h2 id={`${section.id}-title`}>{section.title}</h2>

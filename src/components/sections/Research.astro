@@ -1,0 +1,56 @@
+---
+import { cv, doiUrl, pmidUrl } from '../../lib/cv';
+import { formatCitation } from '../../lib/markdown';
+import Entry from '../Entry.astro';
+
+const m = cv.research.metrics;
+---
+
+<p class="section-intro">{cv.research.narrative}</p>
+{
+  cv.research.positions.map((r) => (
+    <Entry
+      title={r.title}
+      organization={r.organization}
+      organizationUrl={r.organizationUrl}
+      location={r.location}
+      start={r.start}
+      end={r.end}
+      bullets={r.bullets}
+    />
+  ))
+}
+<p class="metrics">
+  <strong>{m.citations} citations</strong>, h-index {m.hIndex}, i10-index {m.i10Index}, {m.citationsSince2021} citations since 2021.
+  <a href={m.url} rel="noopener">{m.source}</a>, {m.asOf}.
+</p>
+<h3 id="publications">Selected publications</h3>
+<ol class="publications">
+  {
+    cv.publications.map((p) => (
+      <li id={`pub-${p.id}`}>
+        {formatCitation(p)}
+        <span class="ids">
+          {p.doi && (
+            <span>
+              <a href={doiUrl(p.doi)} rel="noopener">
+                doi:{p.doi}
+              </a>
+              .{' '}
+            </span>
+          )}
+          {p.pmid && (
+            <span>
+              <a href={pmidUrl(p.pmid)} rel="noopener">
+                PMID {p.pmid}
+              </a>
+              .{' '}
+            </span>
+          )}
+          {p.citations !== undefined && <span>{p.citations} citations. </span>}
+          {p.note && <span>{p.note}.</span>}
+        </span>
+      </li>
+    ))
+  }
+</ol>

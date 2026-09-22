@@ -1,0 +1,17 @@
+---
+import { cv } from '../../lib/cv';
+import DateRange from '../DateRange.astro';
+---
+
+<ul class="plain-list">
+  {
+    cv.teaching.map((t) => (
+      <li>
+        <span>
+          <strong>{t.title}</strong>, {t.organization}
+        </span>
+        {t.start && <DateRange start={t.start} end={t.end} />}
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,28 @@
+---
+import { cv } from '../../lib/cv';
+---
+
+<p class="section-intro">{cv.projects.intro}</p>
+{
+  cv.projects.items.map((p) => (
+    <article class="entry" id={`project-${p.id}`}>
+      <div class="entry-head">
+        <h3>
+          {p.url ? <a href={p.url} rel="noopener">{p.name}</a> : p.name}: {p.tagline}
+        </h3>
+      </div>
+      <p class="entry-meta">
+        <span class="role-tag">{p.role}.</span> {p.status}.
+      </p>
+      <dl class="stack">
+        <dt>Stack:</dt>
+        <dd>{p.stack.join(', ')}</dd>
+      </dl>
+      <ul>
+        {p.bullets.map((b) => (
+          <li>{b}</li>
+        ))}
+      </ul>
+    </article>
+  ))
+}

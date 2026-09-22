@@ -1,0 +1,54 @@
+---
+/**
+ * /for/[slug]: the same CV with a personalized banner and sections reordered
+ * per the audience file. It adds no facts. noindex, nofollow, and excluded
+ * from the sitemap.
+ */
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import StatTiles from '../../components/StatTiles.astro';
+import CvBody from '../../components/CvBody.astro';
+import { cv } from '../../lib/cv';
+import { audiences, type Audience } from '../../lib/audiences';
+import { orderSections } from '../../lib/markdown';
+import { metaDescription } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return audiences.map((a) => ({ params: { slug: a.slug }, props: { audience: a } }));
+}
+
+interface Props {
+  audience: Audience;
+}
+const { audience } = Astro.props;
+const sections = orderSections(audience.emphasize);
+const title = `${cv.identity.displayName} for ${audience.company}: ${audience.role}`;
+---
+
+<Base
+  title={title}
+  description={metaDescription(cv, 200)}
+  path={`/for/${audience.slug}`}
+  noindex
+  navSections={sections}
+  audience={audience.slug}
+>
+  <Hero />
+  <main id="main">
+    <section class="shell" aria-label="Prepared for this role">
+      <div class="audience-banner">
+        <h2>{audience.greeting}</h2>
+        <p class="muted">{audience.company}: {audience.role}</p>
+        <ul>
+          {audience.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+        <p class="disclosure">
+          This view reorders verified facts from the CV for this role; it does not create new credentials or
+          experience. The chat on this page knows the role context and still answers only from the CV.
+        </p>
+      </div>
+    </section>
+    <StatTiles />
+    <CvBody sections={sections} />
+  </main>
+</Base>

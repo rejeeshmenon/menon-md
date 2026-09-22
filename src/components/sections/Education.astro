@@ -1,0 +1,68 @@
+---
+import { cv } from '../../lib/cv';
+import DateRange from '../DateRange.astro';
+
+const c = cv.credentials;
+---
+
+<ul class="plain-list">
+  {
+    cv.education.map((e) => (
+      <li>
+        <span>
+          <strong>{e.degree}</strong>, {e.institution}, {e.location}
+          {e.note && <span class="muted"> ({e.note})</span>}
+        </span>
+        <DateRange start={e.start} end={e.end} />
+      </li>
+    ))
+  }
+</ul>
+
+<div class="credentials">
+  <h3>Board certification</h3>
+  <ul class="plain-list">
+    {
+      c.boards.map((b) => (
+        <li>
+          <span>
+            {b.name}, {b.field} ({b.year})
+          </span>
+          <a class="verify" href={b.verifyUrl} rel="noopener">
+            Verify
+          </a>
+        </li>
+      ))
+    }
+    {
+      c.certifications.map((x) => (
+        <li>
+          <span>
+            {x.name} ({x.year})
+          </span>
+          {x.verifyUrl && (
+            <a class="verify" href={x.verifyUrl} rel="noopener">
+              Source
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h3>Medical licenses</h3>
+  <ul class="plain-list">
+    {
+      c.licenses.map((l) => (
+        <li>
+          <span>
+            {l.state} ({l.status.toLowerCase()}), {l.authority}
+          </span>
+          <a class="verify" href={l.verifyUrl} rel="noopener">
+            Verify
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

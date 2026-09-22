@@ -1,0 +1,19 @@
+---
+import { cv } from '../lib/cv';
+---
+
+<footer class="site-footer">
+  <div class="shell">
+    <ul aria-label="Machine-readable versions">
+      <li><a href="/plain">Plain text version</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/llms-full.txt">llms-full.txt</a></li>
+      <li><a href="/cv.json">cv.json (JSON Resume)</a></li>
+      <li><a href="/chat">Ask about my work</a></li>
+    </ul>
+    <p>
+      {cv.identity.displayName}. Last updated <time datetime={cv.meta.lastUpdated}>{cv.meta.lastUpdated}</time>.
+      Every fact on this site comes from one source file; credentials link to their primary sources.
+    </p>
+  </div>
+</footer>
