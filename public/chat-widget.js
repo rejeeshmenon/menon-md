@@ -126,7 +126,12 @@
       var returnFocusTo = opts.returnFocusTo || document.activeElement;
 
       function closePanel() {
-        root.remove();
+        // Remove the whole host container (passed in as `container`), not just
+        // `root`: __cvChatOpen() checks for a leftover #chat-widget host to
+        // decide whether to create a fresh panel or refocus an existing one,
+        // so leaving an empty host behind made every reopen after a close
+        // silently do nothing.
+        container.remove();
         document.removeEventListener('keydown', onKeydown, true);
         if (returnFocusTo && typeof returnFocusTo.focus === 'function') returnFocusTo.focus();
       }

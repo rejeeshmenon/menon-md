@@ -1,0 +1,43 @@
+---
+/**
+ * "Research -> Product -> Clinic -> Compliance": a static, four-node flow
+ * diagram tracing the one throughline that currently takes reading three
+ * separate sections to reconstruct (docs/portfolio-audit.md, Section 16,
+ * item 3). Every node label is sourced from cv.yaml; nothing is invented.
+ * Deliberately a single fixed-lane sequence, not an exploratory network
+ * graph, per the audit's own warning against scope creep here.
+ */
+import { cv } from '../lib/cv';
+
+const superhuman = cv.projects.items.find((p) => p.id === 'superhuman');
+const dermavue = cv.ventures.find((v) => v.id === 'dermavue');
+const clinicStat = cv.stats.find((s) => s.label.includes('clinics'));
+const complianceBullet = superhuman?.bullets.find((b) => b.text.startsWith('Compliance decisions'))?.text;
+const researchStage = cv.research.lineage[0];
+
+if (!superhuman || !dermavue || !clinicStat || !complianceBullet || !researchStage) {
+  throw new Error('EvidenceGraph: expected cv.yaml research.lineage[0], the "superhuman" and "dermavue" entries, and a clinics stat tile; the source data has changed shape.');
+}
+---
+
+<figure class="evidence-graph">
+  <div class="evidence-node">
+    <span class="evidence-lane">Research</span>
+    <p class="evidence-item">{researchStage.detail}</p>
+  </div>
+  <span class="evidence-arrow" aria-hidden="true">&#8594;</span>
+  <div class="evidence-node">
+    <span class="evidence-lane">Product</span>
+    <p class="evidence-item"><a href="#project-superhuman">{superhuman.name}</a></p>
+  </div>
+  <span class="evidence-arrow" aria-hidden="true">&#8594;</span>
+  <div class="evidence-node">
+    <span class="evidence-lane">Clinic</span>
+    <p class="evidence-item">{dermavue.organization}, {clinicStat.value} clinics</p>
+  </div>
+  <span class="evidence-arrow" aria-hidden="true">&#8594;</span>
+  <div class="evidence-node">
+    <span class="evidence-lane">Compliance</span>
+    <p class="evidence-item">{complianceBullet}</p>
+  </div>
+</figure>

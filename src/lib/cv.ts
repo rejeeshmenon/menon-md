@@ -141,6 +141,7 @@ export const cvSchema = z.object({
   ventures: z.array(roleSchema).min(1),
   research: z.object({
     narrative: nonEmpty,
+    lineage: z.array(z.object({ stage: nonEmpty, detail: nonEmpty })).min(1),
     positions: z.array(roleSchema).min(1),
     metrics: z.object({
       citations: z.number().int().nonnegative(),

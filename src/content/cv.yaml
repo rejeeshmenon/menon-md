@@ -229,6 +229,15 @@ research:
     (2018), and studied at Harvard, Dana-Farber, the U.S. Army and the University of
     Kentucky. Co-investigator on the first randomized trial in chikungunya arthritis
     (120 patients, GCP conditions), now cited in UpToDate and national guidelines.
+  lineage:
+    - stage: Bench research
+      detail: Ussing-chamber intestinal-transport work, University of Florida, 2011 to 2013
+    - stage: Formulation
+      detail: enterade, an amino-acid rehydration formulation
+    - stage: External validation
+      detail: NASA/NSBRI funding; studied at Harvard, Dana-Farber, the U.S. Army and the University of Kentucky
+    - stage: Commercial license
+      detail: Licensed worldwide to Nestle Health Science, 2018
   positions:
     - id: uf
       title: Postdoctoral Research Scholar

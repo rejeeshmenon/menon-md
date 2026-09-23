@@ -3,8 +3,10 @@ import Base from '../layouts/Base.astro';
 import { cv } from '../lib/cv';
 import { audiences } from '../lib/audiences';
 import { pageTitle } from '../lib/seo';
+import { loadTestSummary } from '../lib/testSummary';
 
 const id = cv.identity;
+const testSummary = loadTestSummary();
 const starters = cv.chat.starters;
 // /chat?for=<slug> is read client-side; the set of valid slugs is embedded so
 // the widget only forwards known audiences.
@@ -25,6 +27,15 @@ const validSlugs = audiences.map((a) => a.slug);
         the CV does not say, and does not give medical advice. Up to 8 turns and 10 messages per hour.
       </p>
       <p><a href="/">Back to the CV</a></p>
+      {
+        testSummary && (
+          <p class="test-cert muted">
+            Grounding and citation-discipline checks: {testSummary.passed}/{testSummary.total} passing as of this build
+            (<time datetime={testSummary.generatedAt}>{testSummary.generatedAt.slice(0, 10)}</time>). Generated from the
+            real test run, not hand-maintained; <a href="https://github.com/rejeeshmenon/menon-md/blob/main/tests/chat.test.ts">see the tests</a>.
+          </p>
+        )
+      }
     </div>
     <noscript>
       <div class="audience-banner">

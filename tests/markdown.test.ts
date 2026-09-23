@@ -57,4 +57,20 @@ describe('renderCvMarkdown', () => {
       'Yin L, Vijaygopal P, MacGregor GG, Menon R, et al. Glucose stimulates calcium-activated chloride secretion in small intestinal cells. American Journal of Physiology - Cell Physiology. 2014;306(7):C687-C696.',
     );
   });
+
+  it('states the authorship ladder and the safety-claims disclosure', () => {
+    expect(md).toContain('Authorship across projects, oldest to newest:');
+    expect(md).toContain('Designed and built -> Built and shipped -> Built and shipped -> Built and maintains');
+    expect(md).toContain(cv.projects.disclosure);
+  });
+
+  it('labels every project bullet by dimension', () => {
+    expect(md).toContain("- AI's role: Author of the clinical logic and the autonomy boundary");
+    expect(md).toContain('- Safety and compliance: Every piece of generated guidance is checked');
+  });
+
+  it('states the research lineage from bench to license', () => {
+    expect(md).toContain('Bench research (Ussing-chamber intestinal-transport work');
+    expect(md).toContain('Commercial license (Licensed worldwide to Nestle Health Science, 2018)');
+  });
 });

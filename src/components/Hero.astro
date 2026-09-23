@@ -29,6 +29,16 @@ const id = cv.identity;
               </li>
             ))
         }
+        <li class="no-print">
+          {/* A small, justified exception to the zero-JS default (see PRODUCT.md
+              principle 5): the page already commits to a clean two-page print
+              layout, so this makes that a visible feature instead of an
+              undiscovered browser capability. Degrades to nothing if JS is off;
+              Ctrl+P / the browser's own print menu still works either way. */}
+          <button type="button" class="print-link" onclick="window.print()">
+            Print or save as PDF
+          </button>
+        </li>
       </ul>
       <p class="summary">{cv.summary}</p>
     </div>

@@ -15,8 +15,10 @@ worker-configuration.d.ts
 # dependencies
 node_modules/
 
-# generated at prebuild from cv.yaml
+# generated at prebuild from cv.yaml and from the real vitest run
 public/og.png
+src/generated/
+.vitest/
 
 # tooling
 *.log

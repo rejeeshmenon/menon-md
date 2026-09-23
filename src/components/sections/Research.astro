@@ -2,11 +2,28 @@
 import { cv, doiUrl, pmidUrl } from '../../lib/cv';
 import { formatCitation } from '../../lib/markdown';
 import Entry from '../Entry.astro';
+import EvidenceGraph from '../EvidenceGraph.astro';
 
 const m = cv.research.metrics;
+const itemizedCitations = cv.publications
+  .filter((p) => p.citations !== undefined)
+  .slice()
+  .sort((a, b) => (b.citations ?? 0) - (a.citations ?? 0));
+const itemizedTotal = itemizedCitations.reduce((sum, p) => sum + (p.citations ?? 0), 0);
 ---
 
 <p class="section-intro">{cv.research.narrative}</p>
+<p class="ladder lineage" aria-label="Research lineage, bench to license">
+  {cv.research.lineage.map((l, i) => (
+    <>
+      {i > 0 && <span class="ladder-arrow" aria-hidden="true"> {'->'} </span>}
+      <span class="ladder-step">
+        <span class="ladder-role">{l.stage}</span>
+        <span class="ladder-name muted">{l.detail}</span>
+      </span>
+    </>
+  ))}
+</p>
 {
   cv.research.positions.map((r) => (
     <Entry
@@ -24,6 +41,16 @@ const m = cv.research.metrics;
   <strong>{m.citations} citations</strong>, h-index {m.hIndex}, i10-index {m.i10Index}, {m.citationsSince2021} citations since 2021.
   <a href={m.url} rel="noopener">{m.source}</a>, {m.asOf}.
 </p>
+<details class="citation-breakdown">
+  <summary>Citation breakdown for the publications listed below</summary>
+  <ol>
+    {itemizedCitations.map((p) => <li><a href={`#pub-${p.id}`}>{p.title}</a>: {p.citations} citations.</li>)}
+  </ol>
+  <p class="muted">
+    These {itemizedCitations.length} publications account for {itemizedTotal} of the {m.citations} total citations above;
+    the remainder comes from publications not individually listed on this page.
+  </p>
+</details>
 <h3 id="publications">Selected publications</h3>
 <ol class="publications">
   {
@@ -54,3 +81,5 @@ const m = cv.research.metrics;
     ))
   }
 </ol>
+<p class="ladder-caption muted">From bench to deployed, governed system:</p>
+<EvidenceGraph />

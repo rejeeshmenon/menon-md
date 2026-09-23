@@ -14,6 +14,34 @@ describe('cv.yaml', () => {
     expect(cv.chat.starters).toHaveLength(4);
   });
 
+  it('labels every project bullet with both a dimension and text', () => {
+    for (const p of cv.projects.items) {
+      expect(p.bullets.length).toBeGreaterThan(0);
+      for (const b of p.bullets) {
+        expect(b.label.length).toBeGreaterThan(0);
+        expect(b.text.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('states the research lineage as four ordered stages', () => {
+    expect(cv.research.lineage).toHaveLength(4);
+    expect(cv.research.lineage.map((l) => l.stage)).toEqual([
+      'Bench research',
+      'Formulation',
+      'External validation',
+      'Commercial license',
+    ]);
+  });
+
+  it('rejects a project bullet missing a label', () => {
+    const bad = raw.replace(
+      "- label: What it does\n          text: Consolidates labs",
+      '- text: Consolidates labs',
+    );
+    expect(() => parseCv(bad)).toThrow(CvContentError);
+  });
+
   it('contains no forbidden characters', () => {
     expect(findForbidden(raw)).toBeNull();
   });

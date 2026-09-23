@@ -92,6 +92,7 @@ export function renderSectionMarkdown(cv: Cv, id: SectionId): string {
     }
     case 'research': {
       out.push(cv.research.narrative, '');
+      out.push(cv.research.lineage.map((l) => `${l.stage} (${l.detail})`).join(' -> '), '');
       for (const r of cv.research.positions) out.push(...role(r));
       const m = cv.research.metrics;
       out.push(

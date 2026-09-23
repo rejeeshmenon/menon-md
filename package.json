@@ -6,7 +6,7 @@
   "description": "Personal CV website for Rejeesh Menon, MD. Generated from a single cv.yaml source.",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/og-image.mjs",
+    "prebuild": "node scripts/og-image.mjs && node scripts/test-summary.mjs",
     "build": "astro build && node scripts/verify-outputs.mjs && node scripts/scan-dist.mjs",
     "preview": "wrangler dev",
     "check": "astro check",
