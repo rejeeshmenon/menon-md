@@ -5,7 +5,7 @@ export const SITE = {
   url: 'https://menon.md',
   name: 'menon.md',
   /** Cloudflare Web Analytics token. Replace with the token from the dashboard. */
-  analyticsToken: 'REPLACE_WITH_CLOUDFLARE_WEB_ANALYTICS_TOKEN',
+  analyticsToken: 'ee61e45c98fd4c1cb1066a0d629def6e',
   ogImagePath: '/og.png',
   ogImageWidth: 1200,
   ogImageHeight: 630,
