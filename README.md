@@ -16,7 +16,7 @@ A few concrete decisions from this repo, as an example of what that means in pra
 - **A post-build fact-verification gate, not just a linter.** `scripts/verify-outputs.mjs` parses the actually-built HTML, JSON-LD, `llms.txt`, and `cv.json` after every build and asserts specific facts (citation count, license states, board-certification year) match `src/content/cv.yaml` byte for byte. This exists because a site whose whole premise is "every claim is verifiable" cannot rely on trusting that a template renders a variable correctly — it has to check the shipped output.
 - **The chat's guardrails are enforced in code, not just in the prompt.** `src/chat/guards.ts` is pure, unit-tested logic (message-count limits, origin checks, a fail-closed rate limiter) that runs before the model is ever called, independent of whatever the system prompt says. A prompt is a request to the model; these checks are not.
 
-Every architectural report referenced above, including two rounds of independent multi-agent design and content review, is committed in `docs/` rather than summarized after the fact — the commit history and those documents are the actual record of what was built and why, not a curated retelling.
+The full write-up, including a real bug found and fixed while building this site's own accessibility features, is live at [menon.md/build](https://menon.md/build) (source: `src/pages/build.astro`). Every architectural report referenced above, including two rounds of independent multi-agent design and content review, is committed in `docs/` rather than summarized after the fact — the commit history and those documents are the actual record of what was built and why, not a curated retelling.
 
 ## How it works
 

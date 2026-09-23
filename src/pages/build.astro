@@ -1,0 +1,131 @@
+---
+/**
+ * A real build log, per the authenticity research (docs/authenticity-strategy.md):
+ * specificity beats vagueness, and the credible pattern is decisions +
+ * friction, not a polished summary. Everything on this page is either
+ * quoted from cv.yaml (the site's own single source of truth) or a real,
+ * git-verifiable event from building this repository. Nothing here is
+ * invented.
+ */
+import Base from '../layouts/Base.astro';
+import { cv } from '../lib/cv';
+import { pageTitle } from '../lib/seo';
+
+const id = cv.identity;
+const superhuman = cv.projects.items.find((p) => p.id === 'superhuman')!;
+const clinicOs = cv.projects.items.find((p) => p.id === 'clinic-os')!;
+const boundaryBullet = superhuman.bullets.find((b) => b.text.includes('autonomy boundary'))!.text;
+const complianceBullet = superhuman.bullets.find((b) => b.text.startsWith('Compliance decisions'))!.text;
+const escalationBullet = clinicOs.bullets.find((b) => b.text.includes('red-flag escalation'))!.text;
+
+const title = pageTitle(cv, 'How this was built');
+const description = `How ${id.displayName} builds software with AI coding agents: real decisions, real tradeoffs, and one real bug from building this site.`;
+---
+
+<Base title={title} description={description} path="/build">
+  <main id="main" class="shell build-page">
+    <div class="prose">
+      <h1>How this was built</h1>
+      <p class="muted">
+        {id.name} is a hospitalist and clinical assistant professor, not a trained software engineer. This site, and
+        the clinical software described on it, were built with Claude Code CLI and other AI coding agents, working
+        with a small engineering team. The AI writes code. The clinical logic, the architecture decisions, the
+        safety boundaries, and the compliance calls are his, and he can defend every one of them under questioning.
+      </p>
+      <p><a href="/">Back to the CV</a> &middot; <a href="https://github.com/rejeeshmenon/menon-md">This site's source on GitHub</a></p>
+
+      <h2>Decisions I'd defend</h2>
+      <p class="muted">
+        Three real calls, in the format a technical evaluator would actually want: the decision, the alternative
+        considered, and the consequence.
+      </p>
+
+      <article class="adr">
+        <h3>Deploy on Cloudflare Workers, not Cloudflare Pages</h3>
+        <p>
+          <strong>Context.</strong> The original build brief specified Cloudflare Pages. Partway through the build,
+          the current major version of the Astro Cloudflare adapter turned out to have dropped Pages support
+          entirely, targeting Workers with static assets instead.
+        </p>
+        <p>
+          <strong>Alternative considered.</strong> Pin to an older adapter version to match the original brief
+          exactly, or upgrade the plan to the adapter's current target.
+        </p>
+        <p>
+          <strong>Decision and why.</strong> Moved to Workers. Pinning an old major version of a dependency to satisfy
+          a spec written before that dependency changed is exactly the kind of technical debt a careful engineer
+          avoids creating on day one. The cost was small (different CLI commands, same free tier, same custom-domain
+          flow) and is documented in the design spec committed alongside the code, not silently absorbed.
+        </p>
+      </article>
+
+      <article class="adr">
+        <h3>SuperHuman's autonomy boundary</h3>
+        <p>
+          <strong>Context.</strong> A clinical-intelligence tool that consolidates labs, wearable data and
+          prescription history has to decide what it can act on and what it can only suggest.
+        </p>
+        <p>
+          <strong>Decision.</strong> {boundaryBullet}
+        </p>
+        <p>
+          <strong>Consequence.</strong> {complianceBullet}
+        </p>
+      </article>
+
+      <article class="adr">
+        <h3>Priya's escalation rules</h3>
+        <p>
+          <strong>Context.</strong> An automated WhatsApp/Instagram responder handling real patient messages across
+          seven clinics needs a hard boundary on what it will and won't say on its own.
+        </p>
+        <p>
+          <strong>Decision.</strong> {escalationBullet}
+        </p>
+      </article>
+
+      <h2>A real bug, from building this site</h2>
+      <p>
+        The multi-agent design review that shaped this page's own layout (see the site's repository for the full
+        review) recommended a focus trap and an Escape handler for the floating chat panel, since neither existed
+        before. Adding them introduced a real regression.
+      </p>
+      <p>
+        The panel's close button removed the visible chat element from the page, but left an empty wrapper element
+        behind. The code that decides whether to open a new panel or reuse an existing one checks for that wrapper
+        first, found it still there, and silently did nothing on every attempt to reopen the chat after the first
+        close. No error, no console warning; the button just stopped working.
+      </p>
+      <p>
+        Found it by writing an actual open-close-reopen test against a running local build, not by inspection. Fixed
+        by removing the whole wrapper on close, not just the visible content inside it. It shipped in the same commit
+        as the fix that caused it, verified against the real bug before being called done, not assumed correct
+        because the code looked right.
+      </p>
+
+      <h2>How I actually work with the tool</h2>
+      <p>{cv.projects.intro}</p>
+
+      <p class="test-cert muted">Last updated <time datetime={cv.meta.lastUpdated}>{cv.meta.lastUpdated}</time>.</p>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .build-page {
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: 4rem;
+  }
+  .adr {
+    border: 1px solid var(--hairline);
+    padding: var(--space-4) var(--space-5);
+    margin: 0 0 var(--space-5);
+  }
+  .adr h3 {
+    margin-bottom: var(--space-2);
+  }
+  .adr p {
+    margin: var(--space-2) 0;
+    font-size: var(--step--1);
+  }
+</style>
