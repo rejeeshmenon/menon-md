@@ -8,7 +8,7 @@ Live URL: https://menon.md
 
 ## How this was built
 
-I am a hospitalist and clinical assistant professor, not a trained software engineer. This site, and the clinical software described on it, were built with Claude Code CLI and other AI coding agents. The AI writes code; the clinical logic, the architecture decisions, the safety boundaries, and the compliance calls are mine, and I can defend every one of them under questioning.
+I am an academic internal medicine physician and clinical assistant professor, not a trained software engineer. This site, and the clinical software described on it, were built with Claude Code CLI and other AI coding agents. The AI writes code; the clinical logic, the architecture decisions, the safety boundaries, and the compliance calls are mine, and I can defend every one of them under questioning.
 
 A few concrete decisions from this repo, as an example of what that means in practice, not a marketing claim:
 

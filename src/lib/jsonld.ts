@@ -121,7 +121,7 @@ export function buildJsonLd(cv: Cv): Record<string, unknown> {
     ],
     hasOccupation: [
       occupation(
-        'Hospitalist Physician',
+        'Academic Internal Medicine Physician',
         '29-1216.00',
         'General Internal Medicine Physicians',
         'Attending physician in hospital medicine and clinical assistant professor.',

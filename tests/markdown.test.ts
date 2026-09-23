@@ -13,7 +13,7 @@ describe('renderCvMarkdown', () => {
   it('starts with the name as H1 and front-loads identity', () => {
     const lines = md.split('\n');
     expect(lines[0]).toBe('# Rejeesh Menon, MD');
-    expect(lines[2]).toContain('Academic hospitalist and clinical AI physician-builder');
+    expect(lines[2]).toContain('Academic internal medicine physician and clinical AI physician-builder');
     expect(lines[2]).toContain('Washington State University');
   });
 

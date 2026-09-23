@@ -22,7 +22,7 @@ describe('audiences', () => {
   it('rejects a file with a wrong bullet count or unknown section', () => {
     const raw = readFileSync(new URL('../src/content/audiences/ai-startup.yaml', import.meta.url), 'utf8');
     expect(() => parseAudience(raw.replace('  - technical\n', '  - nope\n'), 'ai-startup.yaml')).toThrow(/emphasize/);
-    const twoBullets = raw.replace(/\n  - Practicing hospitalist[^\n]*\n/, '\n');
+    const twoBullets = raw.replace(/\n  - Practicing academic internal medicine physician[^\n]*\n/, '\n');
     expect(() => parseAudience(twoBullets, 'ai-startup.yaml')).toThrow(/bullets/);
   });
 

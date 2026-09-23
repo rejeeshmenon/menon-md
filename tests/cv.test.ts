@@ -47,7 +47,7 @@ describe('cv.yaml', () => {
   });
 
   it('rejects an em dash', () => {
-    const bad = raw.replace('Academic hospitalist and', 'Academic hospitalist — and');
+    const bad = raw.replace('Academic internal medicine physician and', 'Academic internal medicine physician — and');
     expect(() => parseCv(bad)).toThrow(CvContentError);
     expect(() => parseCv(bad)).toThrow(/em-dash/);
   });

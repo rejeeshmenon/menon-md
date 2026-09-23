@@ -14,7 +14,7 @@ The site is a personal CV. Design is the product: it is the first thing a recrui
 
 ## Product Purpose
 
-One URL that presents Rejeesh Menon, MD as an academic hospitalist and clinical AI physician-builder, with every credential checkable at its primary source. Success: a recruiter can verify board certification, licenses, faculty appointment and publications in two clicks, an LLM summarizes the person accurately from the page alone, and the grounded chat never asserts anything the CV does not say.
+One URL that presents Rejeesh Menon, MD as an academic internal medicine physician and clinical AI physician-builder, with every credential checkable at its primary source. Success: a recruiter can verify board certification, licenses, faculty appointment and publications in two clicks, an LLM summarizes the person accurately from the page alone, and the grounded chat never asserts anything the CV does not say.
 
 ## Brand Personality
 
