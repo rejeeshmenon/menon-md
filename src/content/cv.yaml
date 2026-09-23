@@ -47,7 +47,7 @@ summary: >-
   translational research background that took an amino-acid formulation from the
   Ussing chamber to a Nestle-licensed product; a seven-clinic dermatology group in
   India that serves as a live environment for shipping and testing clinical software.
-  Builds with AI coding tools alongside a small engineering team and owns the clinical
+  Builds solo with Claude Code CLI, writing the prompts and owning the clinical
   logic, the human-in-the-loop boundaries, the safety rules for what generative output
   may say to a patient, and the compliance decisions.
 
@@ -85,9 +85,9 @@ stats:
 
 projects:
   intro: >-
-    Each system was specified, built and shipped with AI-assisted development
-    (Claude Code CLI and agentic tooling) together with a small engineering team.
-    Rejeesh owns the clinical logic, the autonomy boundaries and the compliance decisions.
+    Each system was specified, built and shipped solo, with AI-assisted development
+    (Claude Code CLI and agentic tooling) and no other engineers. Rejeesh writes the
+    prompts and owns the clinical logic, the autonomy boundaries and the compliance decisions.
   disclosure: >-
     The safety-design decisions below are self-reported. Unlike the licenses and
     publications elsewhere on this page, no external body yet certifies clinical-AI
@@ -114,7 +114,7 @@ projects:
         - label: Safety and compliance
           text: Every piece of generated guidance is checked against source data during the pilot.
         - label: Safety and compliance
-          text: "Compliance decisions: BAA-covered data boundary, synthetic-data development, decision-support scoping outside FDA device rules."
+          text: "Compliance decisions: BAA-covered data boundary, synthetic-data development, and a decision-support design built to meet the FDA's non-device clinical decision support criteria, not an autonomous diagnostic device."
         - label: Deployment
           text: Piloting inside the DermaVue clinic network.
     - id: clinic-os
@@ -330,7 +330,7 @@ skills:
   - name: Health data and compliance
     items:
       - HL7 FHIR R4 and SMART on FHIR
-      - HIPAA program design (BAA boundaries, synthetic-data development, decision-support scoping outside FDA device rules)
+      - HIPAA program design (BAA boundaries, synthetic-data development, decision-support design built to meet the FDA's non-device clinical decision support criteria)
       - Twenty CRM, Chatwoot, WhatsApp Business API
   - name: Clinical systems (daily attending user)
     items:
@@ -383,17 +383,17 @@ credentials:
       stateCode: WA
       status: Active
       authority: Washington Medical Commission
-      verifyUrl: https://fortress.wa.gov/doh/providercredentialsearch/
+      verifyUrl: "https://wahelms.my.site.com/s/license-search?recordId=0cEcr000000fbosEAA"
     - state: Oregon
       stateCode: OR
       status: Active
       authority: Oregon Medical Board
-      verifyUrl: https://omb.oregon.gov/search
+      verifyUrl: "https://omb.oregon.gov/Clients/ORMB/Public/VerificationDetails.aspx?EntityID=1554601"
     - state: California
       stateCode: CA
       status: Active
       authority: Medical Board of California
-      verifyUrl: https://search.dca.ca.gov/
+      verifyUrl: "https://search.dca.ca.gov/details/8002/A/168425/88aa87067d2d11b998290fc11480b24e"
 
 honors:
   - title: Best Resident Teacher of the Year

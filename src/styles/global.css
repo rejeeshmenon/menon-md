@@ -820,16 +820,14 @@ time {
   font-weight: 600;
 }
 
-.citation-breakdown,
-.verify-context {
+.citation-breakdown {
   max-width: var(--measure);
   font-size: var(--step--1);
   color: var(--muted);
   margin: 0 0 var(--space-5);
 }
 
-.citation-breakdown summary,
-.verify-context summary {
+.citation-breakdown summary {
   cursor: pointer;
   color: var(--navy);
 }
