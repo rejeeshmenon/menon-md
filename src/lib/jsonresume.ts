@@ -111,7 +111,7 @@ export function buildJsonResume(cv: Cv): Record<string, unknown> {
       stripUndefined({
         name: p.name,
         description: `${p.tagline}. ${p.status}.`,
-        highlights: p.bullets,
+        highlights: p.bullets.map((b) => `${b.label}: ${b.text}`),
         keywords: p.stack,
         startDate: p.start,
         url: p.url,

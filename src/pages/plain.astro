@@ -51,15 +51,22 @@ const t = (sid: string) => SECTION_ORDER.find((s) => s.id === sid)!.title;
 
       <h2 id="clinical-ai">{t('clinical-ai')}</h2>
       <p>{cv.projects.intro}</p>
+      <p>Authorship across projects, oldest to newest: {cv.projects.items.map((p) => p.role).join(' -> ')}.</p>
       {
         cv.projects.items.map((p) => (
           <section>
             <h3>{p.name}: {p.tagline}</h3>
             <p>Status: {p.status}. Role: {p.role}. Stack: {p.stack.join(', ')}.{p.url && <span> URL: <a href={p.url}>{p.url}</a></span>}</p>
-            <ul>{p.bullets.map((b) => <li>{b}</li>)}</ul>
+            <ul>{p.bullets.map((b) => <li><strong>{b.label}:</strong> {b.text}</li>)}</ul>
           </section>
         ))
       }
+      <p class="disclosure">{cv.projects.disclosure}</p>
+
+      <h2 id="technical">{t('technical')}</h2>
+      <dl>
+        {cv.skills.map((g) => <><dt>{g.name}</dt><dd>{g.items.join('; ')}</dd></>)}
+      </dl>
 
       <h2 id="clinical-practice">{t('clinical-practice')}</h2>
       {
@@ -112,16 +119,6 @@ const t = (sid: string) => SECTION_ORDER.find((s) => s.id === sid)!.title;
         }
       </ol>
 
-      <h2 id="teaching">{t('teaching')}</h2>
-      <ul>
-        {cv.teaching.map((x) => <li>{x.title}, {x.organization}{x.start ? ` (${formatRange(x.start, x.end)})` : ''}.</li>)}
-      </ul>
-
-      <h2 id="technical">{t('technical')}</h2>
-      <dl>
-        {cv.skills.map((g) => <><dt>{g.name}</dt><dd>{g.items.join('; ')}</dd></>)}
-      </dl>
-
       <h2 id="education">{t('education')}</h2>
       <ul>
         {cv.education.map((e) => <li>{e.degree}, {e.institution}, {e.location} ({formatRange(e.start, e.end)}).{e.note ? ` ${e.note}.` : ''}</li>)}
@@ -133,8 +130,9 @@ const t = (sid: string) => SECTION_ORDER.find((s) => s.id === sid)!.title;
         {c.licenses.map((l) => <li>{l.state} physician license ({l.status.toLowerCase()}), {l.authority}. <a href={l.verifyUrl}>Verify</a></li>)}
       </ul>
 
-      <h2 id="honors">{t('honors')}</h2>
+      <h2 id="recognition">{t('recognition')}</h2>
       <ul>
+        {cv.teaching.map((x) => <li>{x.title}, {x.organization}{x.start ? ` (${formatRange(x.start, x.end)})` : ''}.</li>)}
         {cv.honors.map((h) => <li>{h.title}{h.organization ? `, ${h.organization}` : ''}{h.year ? ` (${h.year})` : ''}.{h.note ? ` ${h.note}` : ''}</li>)}
       </ul>
     </main>

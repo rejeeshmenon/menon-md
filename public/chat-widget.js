@@ -24,8 +24,11 @@
     '.cvchat-msg.user{align-self:flex-end;background:var(--tint);border:1px solid var(--hair);padding:.5rem .75rem}' +
     '.cvchat-msg.assistant{align-self:flex-start}' +
     '.cvchat-msg.assistant cite{font-style:normal;color:var(--gold);font-size:.85em}' +
+    '.cvchat-msg.assistant cite a{color:inherit;text-decoration-color:color-mix(in oklab,currentColor 55%,transparent)}' +
     '.cvchat-msg.error{color:var(--muted);font-size:.9rem}' +
-    '.cvchat-starters{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 1rem .75rem}' +
+    '.cvchat-starters{padding:0 1rem .75rem;display:flex;flex-direction:column;gap:.6rem}' +
+    '.cvchat-starters-group h3{font:400 .72rem system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .35rem}' +
+    '.cvchat-starters-row{display:flex;flex-wrap:wrap;gap:.5rem}' +
     '.cvchat-starters button{background:none;border:1px solid var(--hair);color:var(--navy);font:inherit;font-size:.8rem;text-align:left;padding:.4rem .6rem;cursor:pointer}' +
     '.cvchat-starters button:hover{border-color:var(--navy)}' +
     '.cvchat-form{display:flex;gap:.5rem;padding:.75rem 1rem;border-top:1px solid var(--hair)}' +
@@ -34,7 +37,23 @@
     '.cvchat-form button[disabled]{opacity:.6;cursor:default}' +
     '.cvchat-foot{padding:0 1rem .75rem;color:var(--muted);font-size:.72rem}' +
     '.cvchat-foot a{color:inherit}' +
+    '.cvchat-vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}' +
     '@media(prefers-reduced-motion:no-preference){.cvchat-panel{animation:cvchat-in .2s cubic-bezier(.22,1,.36,1)}@keyframes cvchat-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}';
+
+  // Bracketed [Section Name] citations link to the matching CV section anchor
+  // when the label matches a known section; otherwise they still render as a
+  // <cite>, just not as a link. Kept in sync with src/lib/markdown.ts's
+  // SECTION_ORDER by title (short titles are not enough here, the model is
+  // instructed to cite the full section title).
+  var SECTION_LINKS = {
+    'Clinical AI and Software': 'clinical-ai',
+    'Technical Capabilities': 'technical',
+    'Clinical Practice': 'clinical-practice',
+    Entrepreneurship: 'entrepreneurship',
+    Research: 'research',
+    'Education and Credentials': 'education',
+    'Teaching and Recognition': 'recognition',
+  };
 
   function el(tag, attrs, children) {
     var n = document.createElement(tag);
@@ -50,14 +69,24 @@
     document.head.appendChild(s);
   }
 
-  // Render assistant text safely: escape everything, then mark [Section] citations.
+  // Render assistant text safely: escape everything, then mark [Section]
+  // citations, linking to the matching on-page section when known.
   function renderAssistant(node, text) {
     node.textContent = '';
     var re = /\[([A-Z][A-Za-z ,&-]{1,60})\]/g;
     var last = 0, m;
     while ((m = re.exec(text))) {
       if (m.index > last) node.appendChild(document.createTextNode(text.slice(last, m.index)));
-      node.appendChild(el('cite', { text: '[' + m[1] + ']' }));
+      var label = m[1];
+      var targetId = SECTION_LINKS[label];
+      var cite = el('cite', {});
+      if (targetId) {
+        var link = el('a', { href: '/#' + targetId, text: '[' + label + ']' });
+        cite.appendChild(link);
+      } else {
+        cite.textContent = '[' + label + ']';
+      }
+      node.appendChild(cite);
       last = m.index + m[0].length;
     }
     if (last < text.length) node.appendChild(document.createTextNode(text.slice(last)));
@@ -71,7 +100,13 @@
     var audience = opts.audience || null;
     var starters = opts.starters || [];
 
-    var log = el('div', { class: 'cvchat-log', role: 'log', 'aria-live': 'polite', 'aria-label': 'Conversation' });
+    // The visible transcript is NOT itself an aria-live region: streaming
+    // token-by-token into a live region causes most screen readers to
+    // re-announce the growing message repeatedly, producing a garbled read.
+    // A separate, visually hidden status region announces once per turn
+    // ("Responding", then the complete answer), not per token.
+    var log = el('div', { class: 'cvchat-log', role: 'log', 'aria-live': 'off', 'aria-label': 'Conversation' });
+    var status = el('div', { class: 'cvchat-vh', role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
     var startersBox = el('div', { class: 'cvchat-starters' });
     var textarea = el('textarea', { rows: '1', maxlength: String(MAX_CHARS), placeholder: 'Ask about his experience', 'aria-label': 'Your question' });
     var sendBtn = el('button', { type: 'submit', text: 'Send question' });
@@ -84,11 +119,38 @@
     var head = el('div', { class: 'cvchat-head' }, [
       el('div', {}, [el('h2', { text: 'Ask about my work' }), document.createTextNode(' '), el('small', { text: 'grounded on the CV' })]),
     ]);
-    var root = el('section', { class: 'cvchat', 'aria-label': 'Ask about my work' }, [head, log, startersBox, form, foot]);
+    var root = el('section', { class: 'cvchat', 'aria-label': 'Ask about my work' }, [head, log, status, startersBox, form, foot]);
     if (opts.floating) {
       root.classList.add('cvchat-panel');
       var close = el('button', { class: 'cvchat-close', type: 'button', text: 'Close', 'aria-label': 'Close chat' });
-      close.addEventListener('click', function () { root.remove(); });
+      var returnFocusTo = opts.returnFocusTo || document.activeElement;
+
+      function closePanel() {
+        root.remove();
+        document.removeEventListener('keydown', onKeydown, true);
+        if (returnFocusTo && typeof returnFocusTo.focus === 'function') returnFocusTo.focus();
+      }
+
+      function focusableEls() {
+        return Array.prototype.slice.call(
+          root.querySelectorAll('a[href], button:not([disabled]), textarea, input, [tabindex]:not([tabindex="-1"])')
+        ).filter(function (n) { return n.offsetParent !== null; });
+      }
+
+      // Escape closes the panel; Tab/Shift+Tab wrap inside it (a simple focus trap)
+      // so keyboard users cannot silently tab out into the page behind it.
+      function onKeydown(e) {
+        if (e.key === 'Escape') { e.preventDefault(); closePanel(); return; }
+        if (e.key !== 'Tab') return;
+        var items = focusableEls();
+        if (!items.length) return;
+        var first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+
+      close.addEventListener('click', closePanel);
+      document.addEventListener('keydown', onKeydown, true);
       head.appendChild(close);
     }
 
@@ -100,13 +162,29 @@
       return n;
     }
 
+    // Group the same four starter strings (cv.chat.starters, unchanged) under
+    // three intent labels rather than one flat row. Indices match the fixed
+    // order of cv.chat.starters in cv.yaml: 0=fit, 1=SuperHuman safety,
+    // 2=research, 3=seven-clinic deployment.
+    var STARTER_GROUPS = [
+      { label: 'Evaluate fit', indexes: [0] },
+      { label: 'See the evidence', indexes: [1, 3] },
+      { label: 'Understand the research', indexes: [2] },
+    ];
+
     function setStarters() {
       startersBox.textContent = '';
       if (history.length) return;
-      starters.forEach(function (q) {
-        var b = el('button', { type: 'button', text: q });
-        b.addEventListener('click', function () { ask(q); });
-        startersBox.appendChild(b);
+      STARTER_GROUPS.forEach(function (g) {
+        var qs = g.indexes.map(function (i) { return starters[i]; }).filter(Boolean);
+        if (!qs.length) return;
+        var row = el('div', { class: 'cvchat-starters-row' });
+        qs.forEach(function (q) {
+          var b = el('button', { type: 'button', text: q });
+          b.addEventListener('click', function () { ask(q); });
+          row.appendChild(b);
+        });
+        startersBox.appendChild(el('div', { class: 'cvchat-starters-group' }, [el('h3', { text: g.label }), row]));
       });
     }
 
@@ -125,6 +203,7 @@
       addMsg('user', question);
       setStarters();
       var node = addMsg('assistant', '');
+      status.textContent = "Rejeesh's assistant is responding.";
       var answer = '';
       var payload = { messages: history.slice(-MAX_TURNS) };
       if (audience) payload.audience = audience;
@@ -166,11 +245,15 @@
         .then(function () {
           if (!answer) { node.remove(); history.pop(); throw new Error('No answer was returned.'); }
           history.push({ role: 'assistant', content: answer });
+          // One clean announcement of the finished answer, not one per token.
+          status.textContent = 'Response complete. ' + answer;
         })
         .catch(function (err) {
           if (node.parentNode && !answer) node.remove();
           if (history.length && history[history.length - 1].role === 'user') history.pop();
-          addMsg('error', (err && err.message) || 'Something went wrong.');
+          var msg = (err && err.message) || 'Something went wrong.';
+          addMsg('error', msg);
+          status.textContent = msg;
         })
         .then(function () {
           busy = false;
@@ -211,6 +294,7 @@
       floating: true,
       audience: launcher ? launcher.getAttribute('data-audience') : null,
       starters: window.__cvChatStarters || readStarters(),
+      returnFocusTo: launcher || document.activeElement,
     });
   };
 })();

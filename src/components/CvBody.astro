@@ -5,10 +5,9 @@ import ClinicalAi from './sections/ClinicalAi.astro';
 import ClinicalPractice from './sections/ClinicalPractice.astro';
 import Entrepreneurship from './sections/Entrepreneurship.astro';
 import Research from './sections/Research.astro';
-import Teaching from './sections/Teaching.astro';
 import Technical from './sections/Technical.astro';
 import Education from './sections/Education.astro';
-import Honors from './sections/Honors.astro';
+import Recognition from './sections/Recognition.astro';
 
 interface Props {
   sections: readonly SectionDef[];
@@ -20,10 +19,9 @@ const registry = {
   'clinical-practice': ClinicalPractice,
   entrepreneurship: Entrepreneurship,
   research: Research,
-  teaching: Teaching,
   technical: Technical,
   education: Education,
-  honors: Honors,
+  recognition: Recognition,
 } as const;
 
 type RegistryId = keyof typeof registry;

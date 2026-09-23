@@ -11,17 +11,19 @@ const { sections } = Astro.props;
 <nav class="site-nav" aria-label="Sections">
   <div class="shell">
     <a class="brand" href="#top">{cv.identity.displayName}</a>
-    <ul>
-      {
-        sections.map((s) => (
-          <li>
-            <a class="section-link" href={`#${s.id}`} data-section={s.id}>
-              {s.short}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="nav-scroll">
+      <ul>
+        {
+          sections.map((s) => (
+            <li>
+              <a class="section-link" href={`#${s.id}`} data-section={s.id}>
+                {s.short}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </nav>
 

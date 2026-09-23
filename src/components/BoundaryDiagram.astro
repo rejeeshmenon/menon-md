@@ -1,0 +1,76 @@
+---
+/**
+ * "The Boundary Line": a static, zero-JavaScript diagram of the human-in-the-
+ * loop checkpoint between AI-generated output and the patient, for the two
+ * products that make this claim (SuperHuman, DermaVue Clinic OS / Priya).
+ *
+ * Selected as the lead hero direction in the 2026-09-22 design audit
+ * (docs/portfolio-audit.md, Section 15): it is the only proposed hero
+ * concept that shows the site's central differentiating fact instead of
+ * describing it. Every label is quoted or closely paraphrased from the
+ * matching bullet in cv.yaml; nothing here is invented, and both source
+ * bullets are looked up dynamically so the diagram cannot silently drift
+ * out of sync with cv.yaml.
+ *
+ * Pure inline SVG: renders and is legible with JavaScript disabled, prints
+ * as a clean line diagram, and needs no chart library. The only enhancement
+ * is a native <title> per marker (a browser tooltip on hover/focus) backed
+ * by a <details> fallback below the diagram, since SVG <title> support in
+ * screen readers is inconsistent.
+ */
+import { cv } from '../lib/cv';
+
+const superhuman = cv.projects.items.find((p) => p.id === 'superhuman');
+const clinicOs = cv.projects.items.find((p) => p.id === 'clinic-os');
+
+const boundaryBullet = superhuman?.bullets.find((b) => b.text.includes('autonomy boundary'))?.text;
+const escalationBullet = clinicOs?.bullets.find((b) => b.text.includes('red-flag escalation'))?.text;
+
+if (!superhuman || !clinicOs || !boundaryBullet || !escalationBullet) {
+  throw new Error(
+    'BoundaryDiagram: expected cv.yaml projects "superhuman" and "clinic-os" with their autonomy-boundary and red-flag-escalation bullets; the source data has changed shape.',
+  );
+}
+---
+
+<figure class="boundary-diagram no-print-hide-figcaption">
+  <svg viewBox="0 0 520 150" role="img" aria-labelledby="boundary-title boundary-desc" class="boundary-svg">
+    <title id="boundary-title">How AI-generated output reaches a patient</title>
+    <desc id="boundary-desc">
+      A line from generated output to patient, with two checkpoints: physician sign-off for SuperHuman, and red-flag
+      escalation for the Priya patient-messaging responder.
+    </desc>
+    <line x1="20" y1="75" x2="500" y2="75" class="boundary-line" />
+
+    <g class="boundary-node">
+      <circle cx="20" cy="75" r="5" />
+      <text x="20" y="105" text-anchor="middle" class="boundary-endpoint">Generated output</text>
+    </g>
+
+    <g class="boundary-node">
+      <circle cx="190" cy="75" r="6" class="boundary-checkpoint" />
+      <line x1="190" y1="69" x2="190" y2="40" class="boundary-tick" />
+      <text x="190" y="30" text-anchor="middle" class="boundary-label">Physician sign-off</text>
+      <text x="190" y="122" text-anchor="middle" class="boundary-sublabel">SuperHuman</text>
+      <title>{boundaryBullet}</title>
+    </g>
+
+    <g class="boundary-node">
+      <circle cx="340" cy="75" r="6" class="boundary-checkpoint" />
+      <line x1="340" y1="81" x2="340" y2="110" class="boundary-tick" />
+      <text x="340" y="132" text-anchor="middle" class="boundary-label">Red-flag escalation</text>
+      <text x="340" y="30" text-anchor="middle" class="boundary-sublabel">Priya, DermaVue Clinic OS</text>
+      <title>{escalationBullet}</title>
+    </g>
+
+    <g class="boundary-node">
+      <circle cx="500" cy="75" r="5" />
+      <text x="500" y="105" text-anchor="middle" class="boundary-endpoint">Patient</text>
+    </g>
+  </svg>
+  <details class="boundary-details">
+    <summary>How this works</summary>
+    <p><strong>SuperHuman.</strong> {boundaryBullet}</p>
+    <p><strong>Priya (DermaVue Clinic OS).</strong> {escalationBullet}</p>
+  </details>
+</figure>

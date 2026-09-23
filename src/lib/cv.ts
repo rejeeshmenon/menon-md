@@ -27,6 +27,12 @@ const statSchema = z.object({
   sublabel: nonEmpty,
 });
 
+const projectBulletSchema = z.object({
+  /** Dimension this bullet documents, e.g. "What it does", "AI's role", "Safety and compliance", "Deployment". */
+  label: nonEmpty,
+  text: nonEmpty,
+});
+
 const projectSchema = z.object({
   id: nonEmpty,
   name: nonEmpty,
@@ -36,7 +42,7 @@ const projectSchema = z.object({
   start: isoDate,
   url: url.optional(),
   stack: z.array(nonEmpty).min(1),
-  bullets: z.array(nonEmpty).min(1),
+  bullets: z.array(projectBulletSchema).min(1),
 });
 
 const roleSchema = z.object({
@@ -128,6 +134,7 @@ export const cvSchema = z.object({
   stats: z.array(statSchema).length(4),
   projects: z.object({
     intro: nonEmpty,
+    disclosure: nonEmpty,
     items: z.array(projectSchema).min(1),
   }),
   clinical: z.array(roleSchema).min(1),

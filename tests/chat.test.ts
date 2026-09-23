@@ -125,7 +125,7 @@ describe('buildSystemPrompt', () => {
   it('embeds the full CV markdown', () => {
     expect(prompt).toContain('<cv>');
     expect(prompt).toContain('# Rejeesh Menon, MD');
-    expect(prompt).toContain('## Honors');
+    expect(prompt).toContain('## Teaching and Recognition');
   });
 
   it('states the grounding, citation, refusal, persona and medical-advice rules', () => {

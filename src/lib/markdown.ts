@@ -14,16 +14,24 @@ export interface SectionDef {
   short: string;
 }
 
-/** Canonical order and ids of the CV sections. HTML anchors use these ids. */
+/**
+ * Canonical order and ids of the CV sections. HTML anchors use these ids.
+ *
+ * Order and grouping per the 2026-09-22 multi-agent design audit
+ * (docs/portfolio-audit.md, Section 6): Technical Capabilities moved
+ * directly behind the products it substantiates, Education and Credentials
+ * brought forward, and the two thinnest sections (Teaching, Honors) merged
+ * into one "Teaching and Recognition" section rather than each carrying
+ * full-section visual weight for five one-line entries.
+ */
 export const SECTION_ORDER: readonly SectionDef[] = [
   { id: 'clinical-ai', title: 'Clinical AI and Software', short: 'Software' },
+  { id: 'technical', title: 'Technical Capabilities', short: 'Capabilities' },
   { id: 'clinical-practice', title: 'Clinical Practice', short: 'Practice' },
   { id: 'entrepreneurship', title: 'Entrepreneurship', short: 'Ventures' },
   { id: 'research', title: 'Research', short: 'Research' },
-  { id: 'teaching', title: 'Teaching and Academic Service', short: 'Teaching' },
-  { id: 'technical', title: 'Technical Capabilities', short: 'Capabilities' },
   { id: 'education', title: 'Education and Credentials', short: 'Credentials' },
-  { id: 'honors', title: 'Honors', short: 'Honors' },
+  { id: 'recognition', title: 'Teaching and Recognition', short: 'Recognition' },
 ] as const;
 
 export type SectionId = (typeof SECTION_ORDER)[number]['id'];
@@ -62,13 +70,16 @@ export function renderSectionMarkdown(cv: Cv, id: SectionId): string {
   switch (id) {
     case 'clinical-ai': {
       out.push(cv.projects.intro, '');
+      const ladder = cv.projects.items.map((p) => p.role).join(' -> ');
+      out.push(`Authorship across projects, oldest to newest: ${ladder}.`, '');
       for (const p of cv.projects.items) {
         out.push(`### ${p.name}: ${p.tagline}`);
         out.push(`Status: ${p.status}. Role: ${p.role}. Stack: ${p.stack.join(', ')}.`);
         if (p.url) out.push(`URL: ${p.url}`);
-        for (const b of p.bullets) out.push(`- ${b}`);
+        for (const b of p.bullets) out.push(`- ${b.label}: ${b.text}`);
         out.push('');
       }
+      out.push(cv.projects.disclosure, '');
       break;
     }
     case 'clinical-practice': {
@@ -101,14 +112,6 @@ export function renderSectionMarkdown(cv: Cv, id: SectionId): string {
       out.push('');
       break;
     }
-    case 'teaching': {
-      for (const t of cv.teaching) {
-        const when = t.start ? ` (${formatRange(t.start, t.end)})` : '';
-        out.push(`- ${t.title}, ${t.organization}${when}.`);
-      }
-      out.push('');
-      break;
-    }
     case 'technical': {
       for (const g of cv.skills) out.push(`- ${g.name}: ${g.items.join('; ')}.`);
       out.push('');
@@ -130,7 +133,11 @@ export function renderSectionMarkdown(cv: Cv, id: SectionId): string {
       out.push(`- Medical licenses: ${lic}.`, '');
       break;
     }
-    case 'honors': {
+    case 'recognition': {
+      for (const t of cv.teaching) {
+        const when = t.start ? ` (${formatRange(t.start, t.end)})` : '';
+        out.push(`- ${t.title}, ${t.organization}${when}.`);
+      }
       for (const h of cv.honors) {
         const org = h.organization ? `, ${h.organization}` : '';
         const yr = h.year ? ` (${h.year})` : '';

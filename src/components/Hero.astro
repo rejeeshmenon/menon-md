@@ -1,11 +1,12 @@
 ---
 import { cv } from '../lib/cv';
+import BoundaryDiagram from './BoundaryDiagram.astro';
 
 const id = cv.identity;
 ---
 
 <header class="hero" id="top">
-  <div class="shell">
+  <div class="shell hero-grid">
     <div class="prose">
       <h1>{id.name}<span class="degree">, {id.postNominal}</span></h1>
       <p class="headline">{id.headline}</p>
@@ -31,5 +32,6 @@ const id = cv.identity;
       </ul>
       <p class="summary">{cv.summary}</p>
     </div>
+    <BoundaryDiagram />
   </div>
 </header>

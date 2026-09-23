@@ -20,13 +20,23 @@
 
   --step--1: 0.85rem;
   --step-0: 1rem;
-  --step-1: 1.15rem;
+  --step-1: 1.2rem;
   --step-2: 1.4rem;
-  --step-3: 1.8rem;
+  --step-3: 1.85rem;
   --step-4: clamp(2.2rem, 1.6rem + 2vw, 3rem);
   --measure: 72ch;
   --shell: 76rem;
   --nav-h: 3rem;
+  --rail: 11rem;
+
+  /* Spacing scale. Existing ad hoc values are not bulk-refactored; new
+     components consume these tokens, and old ones migrate opportunistically. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2.5rem;
 
   --z-nav: 10;
   --z-launcher: 20;
@@ -217,6 +227,14 @@ time {
   min-width: 0;
 }
 
+.site-nav .nav-scroll {
+  min-width: 0;
+  /* Fade the trailing edge so a horizontally-scrolled nav signals there is
+     more to see, instead of clipping silently with a hidden scrollbar. */
+  mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+}
+
 .site-nav .brand {
   font-family: var(--font-serif);
   color: var(--navy);
@@ -265,6 +283,22 @@ time {
    ------------------------------------------------------------------ */
 .hero {
   padding: clamp(2.5rem, 4vw, 4.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+  }
+  .hero-grid .boundary-diagram {
+    margin-top: 2.5rem;
+  }
 }
 
 .hero .name-line {
@@ -338,11 +372,92 @@ time {
 }
 
 /* ------------------------------------------------------------------
+   Boundary diagram ("The Boundary Line" hero direction). Pure inline SVG,
+   no icons, no color beyond the existing navy/gold/muted tokens.
+   ------------------------------------------------------------------ */
+.boundary-diagram {
+  margin: 0;
+  max-width: 32rem;
+}
+
+.boundary-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.boundary-line {
+  stroke: var(--hairline);
+  stroke-width: 1.5;
+}
+
+.boundary-node circle {
+  fill: var(--paper);
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.boundary-node .boundary-checkpoint {
+  fill: var(--paper);
+  stroke: var(--navy);
+  stroke-width: 2;
+}
+
+.boundary-tick {
+  stroke: var(--gold);
+  stroke-width: 1.5;
+}
+
+.boundary-endpoint {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  fill: var(--ink);
+}
+
+.boundary-label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  fill: var(--navy);
+}
+
+.boundary-sublabel {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  fill: var(--muted);
+}
+
+.boundary-details {
+  margin-top: var(--space-4);
+  font-size: var(--step--1);
+  color: var(--muted);
+  max-width: var(--measure);
+}
+
+.boundary-details summary {
+  cursor: pointer;
+  color: var(--navy);
+  font-size: var(--step--1);
+}
+
+.boundary-details p {
+  margin: var(--space-2) 0 0;
+}
+
+.boundary-details strong {
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------------
    Stat tiles: hairline cells, no icons, no fills
    ------------------------------------------------------------------ */
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  /* Explicit 4-column desktop layout, not auto-fit: the mobile rule below
+     depends on knowing there are exactly 2 columns per row, which auto-fit
+     does not guarantee at in-between viewport widths. cv.stats.length is
+     asserted to be 4 in scripts/verify-outputs.mjs, so this stays in sync. */
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
   margin: 1rem 0 0;
@@ -360,12 +475,14 @@ time {
 }
 
 @media (max-width: 40rem) {
-  .stats > div:nth-child(3) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats > div:nth-child(2n+1) {
     border-left: 0;
     padding-left: 0;
-    border-top: 1px solid var(--hairline);
   }
-  .stats > div:nth-child(4) {
+  .stats > div:nth-child(n+3) {
     border-top: 1px solid var(--hairline);
   }
 }
@@ -421,7 +538,7 @@ time {
 @media (min-width: 64rem) {
   .cv-section {
     display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
+    grid-template-columns: var(--rail) minmax(0, 1fr);
     column-gap: 1.5rem;
     align-items: start;
   }
@@ -496,6 +613,151 @@ time {
 
 .role-tag {
   color: var(--ink);
+}
+
+/* ------------------------------------------------------------------
+   Clinical AI spec-sheet cards and the authorship ladder
+   ------------------------------------------------------------------ */
+.ladder {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  margin: 0 0 var(--space-5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.ladder-step {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.3;
+}
+
+.ladder-role {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.ladder-name {
+  font-size: 0.78em;
+}
+
+.ladder-arrow {
+  color: var(--gold);
+  padding: 0 var(--space-2);
+}
+
+.spec-card {
+  border: 1px solid var(--hairline);
+  padding: var(--space-4) var(--space-5);
+  margin: 0 0 var(--space-5);
+  max-width: var(--measure);
+}
+
+.spec-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+}
+
+.status-pill {
+  font-size: var(--step--1);
+  color: var(--muted);
+  background: var(--tint);
+  border: 1px solid var(--hairline);
+  padding: 0.1rem 0.6rem;
+  white-space: nowrap;
+}
+
+.spec-card-body summary {
+  cursor: pointer;
+  margin-top: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  align-items: baseline;
+  font-size: var(--step--1);
+}
+
+.spec-card-body summary .role-tag {
+  font-weight: 600;
+}
+
+.spec-card-body[open] summary {
+  margin-bottom: var(--space-4);
+}
+
+.spec-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 40rem) {
+  .spec-card-grid {
+    grid-template-columns: minmax(11rem, 30%) minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+.spec-card-meta dl {
+  margin: 0;
+  font-size: var(--step--1);
+}
+
+.spec-card-meta dt {
+  color: var(--muted);
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  margin-top: var(--space-3);
+}
+
+.spec-card-meta dt:first-child {
+  margin-top: 0;
+}
+
+.spec-card-meta dd {
+  margin: 0.15rem 0 0;
+  color: var(--ink);
+}
+
+.stack-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stack-list li {
+  margin: 0;
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 0.82em;
+}
+
+.spec-dim + .spec-dim {
+  margin-top: var(--space-4);
+}
+
+.spec-dim h4 {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.2rem;
+}
+
+.spec-dim p {
+  margin: 0 0 0.3rem;
+  font-size: var(--step--1);
+}
+
+.disclosure {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  color: var(--muted);
+  margin-top: var(--space-4);
 }
 
 /* ------------------------------------------------------------------
@@ -578,7 +840,7 @@ time {
 
 @media (min-width: 48rem) {
   .skills {
-    grid-template-columns: 11rem minmax(0, 1fr);
+    grid-template-columns: var(--rail) minmax(0, 1fr);
   }
 }
 

@@ -1,0 +1,43 @@
+---
+/**
+ * Merges the former Teaching and Honors sections into one compact section.
+ * Both were thin (five one-line entries each) and were getting full-section
+ * visual weight identical to Clinical AI and Software; see the 2026-09-22
+ * design audit, docs/portfolio-audit.md Section 6.
+ */
+import { cv } from '../../lib/cv';
+---
+
+<ul class="plain-list">
+  {
+    cv.teaching.map((t) => (
+      <li>
+        <span>
+          <strong>{t.title}</strong>, {t.organization}
+        </span>
+        {t.start && (
+          <span class="when">
+            {t.start.slice(0, 4)}
+            {t.end && t.end !== t.start ? ` to ${t.end.slice(0, 4)}` : ''}
+          </span>
+        )}
+      </li>
+    ))
+  }
+  {
+    cv.honors.map((h) => (
+      <li>
+        <span>
+          <strong>{h.title}</strong>
+          {h.organization && <span>, {h.organization}</span>}
+          {h.note && <span class="muted"> {h.note}</span>}
+        </span>
+        {h.year && (
+          <span class="when">
+            <time datetime={String(h.year)}>{h.year}</time>
+          </span>
+        )}
+      </li>
+    ))
+  }
+</ul>

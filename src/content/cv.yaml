@@ -88,6 +88,10 @@ projects:
     Each system was specified, built and shipped with AI-assisted development
     (Claude Code CLI and agentic tooling) together with a small engineering team.
     Rejeesh owns the clinical logic, the autonomy boundaries and the compliance decisions.
+  disclosure: >-
+    The safety-design decisions below are self-reported. Unlike the licenses and
+    publications elsewhere on this page, no external body yet certifies clinical-AI
+    autonomy-boundary design of this kind.
   items:
     - id: superhuman
       name: SuperHuman
@@ -103,11 +107,16 @@ projects:
         - AWS
         - HIPAA-conscious architecture
       bullets:
-        - Consolidates labs, wearable data and prescription history into physician-reviewed guidance.
-        - Author of the clinical logic and the autonomy boundary, meaning what the tool decides on its own and what requires physician sign-off.
-        - Every piece of generated guidance is checked against source data during the pilot.
-        - "Compliance decisions: BAA-covered data boundary, synthetic-data development, decision-support scoping outside FDA device rules."
-        - Piloting inside the DermaVue clinic network.
+        - label: What it does
+          text: Consolidates labs, wearable data and prescription history into physician-reviewed guidance.
+        - label: AI's role
+          text: Author of the clinical logic and the autonomy boundary, meaning what the tool decides on its own and what requires physician sign-off.
+        - label: Safety and compliance
+          text: Every piece of generated guidance is checked against source data during the pilot.
+        - label: Safety and compliance
+          text: "Compliance decisions: BAA-covered data boundary, synthetic-data development, decision-support scoping outside FDA device rules."
+        - label: Deployment
+          text: Piloting inside the DermaVue clinic network.
     - id: clinic-os
       name: DermaVue Clinic OS
       tagline: Patient engagement and CRM platform
@@ -123,9 +132,12 @@ projects:
         - WhatsApp Business API
         - Docker on Linux VPS
       bullets:
-        - Patient messaging for all seven clinics across WhatsApp, Instagram and Facebook Messenger, with automatic lead qualification into one CRM.
-        - Designed the automated responder "Priya", including forbidden clinical topics and red-flag escalation rules, with live log review each release.
-        - Inbound lead integration via webhooks with clinic routing and de-duplication.
+        - label: What it does
+          text: Patient messaging for all seven clinics across WhatsApp, Instagram and Facebook Messenger, with automatic lead qualification into one CRM.
+        - label: AI's role and safety
+          text: Designed the automated responder "Priya", including forbidden clinical topics and red-flag escalation rules, with live log review each release.
+        - label: What it does
+          text: Inbound lead integration via webhooks with clinic routing and de-duplication.
     - id: commerce
       name: DermaVue Commerce
       tagline: Online store for the group's skincare line
@@ -137,7 +149,8 @@ projects:
         - Vendure
         - PostgreSQL
       bullets:
-        - Search-optimized storefront with an ingredient database linking each product to the evidence behind its formulation.
+        - label: What it does
+          text: Search-optimized storefront with an ingredient database linking each product to the evidence behind its formulation.
     - id: dermavue-web
       name: dermavue.com
       tagline: Public clinical web platform
@@ -151,7 +164,8 @@ projects:
         - schema.org JSON-LD
         - Search-indexing automation
       bullets:
-        - Condition, procedure and location pages with hand-coded medical schema and answer-engine-oriented structure.
+        - label: What it does
+          text: Condition, procedure and location pages with hand-coded medical schema and answer-engine-oriented structure.
 
 clinical:
   - id: pullman

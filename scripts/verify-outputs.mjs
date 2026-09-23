@@ -43,6 +43,7 @@ const name = cv.identity.displayName;
 const board = cv.credentials.boards[0];
 const licenseStates = cv.credentials.licenses.map((l) => l.state);
 const citations = String(cv.research.metrics.citations);
+check(cv.stats.length === 4, 'cv.yaml: stats must have exactly 4 entries (the StatTiles CSS grid assumes a fixed 4-column desktop / 2-column mobile layout)');
 const clinicStat = cv.stats.find((s) => s.label.includes('clinics'));
 const projectNames = cv.projects.items.map((p) => p.name);
 const dois = cv.publications.filter((p) => p.doi).map((p) => p.doi);

@@ -1,8 +1,22 @@
 # menon.md
 
+[![CI](https://github.com/rejeeshmenon/menon-md/actions/workflows/ci.yml/badge.svg)](https://github.com/rejeeshmenon/menon-md/actions/workflows/ci.yml)
+
 Personal CV website for Rejeesh Menon, MD. Three jobs: a recruiter sees a credible academic CV, an LLM reading the URL gets clean structured facts, and visitors can ask a grounded chat about the CV that cannot invent credentials.
 
 Live URL: https://menon.md
+
+## How this was built
+
+I am a hospitalist and clinical assistant professor, not a trained software engineer. This site, and the clinical software described on it, were built with Claude Code CLI and other AI coding agents. The AI writes code; the clinical logic, the architecture decisions, the safety boundaries, and the compliance calls are mine, and I can defend every one of them under questioning.
+
+A few concrete decisions from this repo, as an example of what that means in practice, not a marketing claim:
+
+- **Cloudflare Pages vs. Workers.** The build brief specified Pages. Mid-build, `@astrojs/cloudflare` turned out to have dropped Pages support in its current major version. Rather than pin to an old adapter to match the original spec, I moved to Workers with static assets, the adapter's current target, documented why in `docs/superpowers/specs/2026-09-21-menon-md-cv-site-design.md`, and kept the same free-tier cost and custom-domain flow.
+- **A post-build fact-verification gate, not just a linter.** `scripts/verify-outputs.mjs` parses the actually-built HTML, JSON-LD, `llms.txt`, and `cv.json` after every build and asserts specific facts (citation count, license states, board-certification year) match `src/content/cv.yaml` byte for byte. This exists because a site whose whole premise is "every claim is verifiable" cannot rely on trusting that a template renders a variable correctly — it has to check the shipped output.
+- **The chat's guardrails are enforced in code, not just in the prompt.** `src/chat/guards.ts` is pure, unit-tested logic (message-count limits, origin checks, a fail-closed rate limiter) that runs before the model is ever called, independent of whatever the system prompt says. A prompt is a request to the model; these checks are not.
+
+Every architectural report referenced above, including two rounds of independent multi-agent design and content review, is committed in `docs/` rather than summarized after the fact — the commit history and those documents are the actual record of what was built and why, not a curated retelling.
 
 ## How it works
 

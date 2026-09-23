@@ -1,28 +1,91 @@
 ---
+/**
+ * Spec-sheet project cards, per the 2026-09-22 design audit
+ * (docs/portfolio-audit.md, Section 9): a fixed CSS grid per card (role and
+ * stack on the left, labeled dimension rows on the right) instead of a flat
+ * bullet list, so projects of different depth stop reading as identical
+ * weight. Bullet depth sits behind a native <details> disclosure, open by
+ * default only for the flagship (first) project. Zero JavaScript.
+ */
+import type { CvProject } from '../../lib/cv';
 import { cv } from '../../lib/cv';
+
+function groupByLabel(bullets: CvProject['bullets']): { label: string; texts: string[] }[] {
+  const order: string[] = [];
+  const byLabel = new Map<string, string[]>();
+  for (const b of bullets) {
+    if (!byLabel.has(b.label)) {
+      byLabel.set(b.label, []);
+      order.push(b.label);
+    }
+    byLabel.get(b.label)!.push(b.text);
+  }
+  return order.map((label) => ({ label, texts: byLabel.get(label)! }));
+}
 ---
 
 <p class="section-intro">{cv.projects.intro}</p>
+
+<p class="ladder" aria-label="Authorship across projects, oldest to newest">
+  {cv.projects.items.map((p, i) => (
+    <>
+      {i > 0 && <span class="ladder-arrow" aria-hidden="true"> {'->'} </span>}
+      <span class="ladder-step">
+        <span class="ladder-role">{p.role}</span>
+        <span class="ladder-name muted">{p.name}</span>
+      </span>
+    </>
+  ))}
+</p>
+
 {
-  cv.projects.items.map((p) => (
-    <article class="entry" id={`project-${p.id}`}>
-      <div class="entry-head">
-        <h3>
-          {p.url ? <a href={p.url} rel="noopener">{p.name}</a> : p.name}: {p.tagline}
-        </h3>
-      </div>
-      <p class="entry-meta">
-        <span class="role-tag">{p.role}.</span> {p.status}.
-      </p>
-      <dl class="stack">
-        <dt>Stack:</dt>
-        <dd>{p.stack.join(', ')}</dd>
-      </dl>
-      <ul>
-        {p.bullets.map((b) => (
-          <li>{b}</li>
-        ))}
-      </ul>
-    </article>
-  ))
+  cv.projects.items.map((p, i) => {
+    const groups = groupByLabel(p.bullets);
+    return (
+      <article class="spec-card" id={`project-${p.id}`}>
+        <header class="spec-card-head">
+          <h3>
+            {p.url ? <a href={p.url} rel="noopener">{p.name}</a> : p.name}: {p.tagline}
+          </h3>
+          <span class="status-pill">{p.status}</span>
+        </header>
+        <details class="spec-card-body" open={i === 0}>
+          <summary>
+            <span class="role-tag">{p.role}</span>
+            <span class="stack-preview muted">{p.stack.join(', ')}</span>
+          </summary>
+          <div class="spec-card-grid">
+            <div class="spec-card-meta">
+              <dl>
+                <dt>Role</dt>
+                <dd>{p.role}</dd>
+                <dt>Stack</dt>
+                <dd>
+                  <ul class="stack-list">
+                    {p.stack.map((s) => (
+                      <li>{s}</li>
+                    ))}
+                  </ul>
+                </dd>
+                <dt>Status</dt>
+                <dd>{p.status}</dd>
+              </dl>
+            </div>
+            <div class="spec-card-dims">
+              {groups.map((g) => (
+                <div class="spec-dim">
+                  <h4>{g.label}</h4>
+                  {g.texts.map((t) => (
+                    <p>{t}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </details>
+      </article>
+    );
+  })
 }
+
+<p class="disclosure">{cv.projects.disclosure}</p>
