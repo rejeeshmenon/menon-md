@@ -52,6 +52,10 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, mcp-protocol-version',
   'Access-Control-Expose-Headers': 'mcp-protocol-version',
+  // Every response on this route must never be cached at the edge: a stale
+  // cached 404 from before this route existed is exactly the class of bug
+  // this caused once already (see docs/build for the write-up).
+  'Cache-Control': 'no-store',
 } as const;
 
 function jsonRpcError(status: number, message: string, code = -32000): Response {
