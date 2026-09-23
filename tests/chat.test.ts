@@ -113,6 +113,19 @@ describe('rate limiting helpers', () => {
     expect(nextRateState(String(LIMITS.perHour))).toEqual({ allowed: false, count: LIMITS.perHour });
   });
 
+  it('accepts a distinct limit for a separate surface (e.g. MCP), independent of the chat budget', () => {
+    expect(nextRateState(String(LIMITS.perHour), 30)).toEqual({ allowed: true, count: LIMITS.perHour + 1 });
+    expect(nextRateState('29', 30)).toEqual({ allowed: true, count: 30 });
+    expect(nextRateState('30', 30)).toEqual({ allowed: false, count: 30 });
+  });
+
+  it('namespaces rate-limit keys by prefix so separate surfaces cannot share a budget by accident', () => {
+    const chatKey = rateLimitKey('abc', new Date('2026-09-21T10:05:00Z'));
+    const mcpKey = rateLimitKey('abc', new Date('2026-09-21T10:05:00Z'), 'mcp');
+    expect(chatKey).not.toBe(mcpKey);
+    expect(mcpKey.startsWith('mcp:abc:')).toBe(true);
+  });
+
   it('log keys follow log:{timestamp}:{random}', () => {
     expect(logKey(new Date('2026-09-21T10:05:00.000Z'))).toMatch(/^log:2026-09-21T10:05:00\.000Z:[0-9a-f]{8}$/);
   });

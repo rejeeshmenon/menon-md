@@ -106,6 +106,54 @@ const description = `How ${id.displayName} builds software with AI coding agents
       <h2>How I actually work with the tool</h2>
       <p>{cv.projects.intro}</p>
 
+      <h2 id="mcp">Query this CV the way I query systems</h2>
+      <p>
+        Reading this page is one way to get these facts. Here is another: this site runs a real, spec-current
+        (2026-07-28, stateless Streamable HTTP) Model Context Protocol server, so an MCP client you already use can
+        query it directly, the same way it would query any other tool.
+      </p>
+      <p class="muted">
+        Every tool here is a direct read of the same source file that generates this page, <code>cv.yaml</code>
+        &mdash; nothing is a second copy that could drift out of sync. The one tool that generates text,
+        <code>why_fit_for_role</code>, reuses the exact grounding prompt the <a href="/chat">on-page chat</a> uses, so
+        the two surfaces can never answer the same question differently.
+      </p>
+
+      <div class="mcp-panel">
+        <p class="mcp-label">Add it with Claude Code</p>
+        <div class="code-copy">
+          <pre><code id="mcp-cli">claude mcp add --transport http menon-md https://menon.md/api/mcp</code></pre>
+          <button type="button" class="copy-btn" data-copy-target="mcp-cli">Copy</button>
+        </div>
+
+        <p class="mcp-label">Or add it to Claude Desktop's config</p>
+        <div class="code-copy">
+          <pre><code id="mcp-json">{`{
+  "mcpServers": {
+    "menon-md": {
+      "url": "https://menon.md/api/mcp"
+    }
+  }
+}`}</code></pre>
+          <button type="button" class="copy-btn" data-copy-target="mcp-json">Copy</button>
+        </div>
+
+        <p class="mcp-label">Tools available</p>
+        <ul class="mcp-tools">
+          <li><code>get_profile</code> &mdash; identity, current title, employer, target roles</li>
+          <li><code>search_experience(query)</code> &mdash; full-text search across clinical, entrepreneurship, research and teaching</li>
+          <li><code>get_projects()</code> / <code>get_project(id)</code> &mdash; the four software projects, including the safety-claims disclosure</li>
+          <li><code>get_publications()</code> &mdash; publications with DOI/PMID and citation metrics</li>
+          <li><code>get_verifiable_credentials()</code> &mdash; board certification, licenses, education, honors</li>
+          <li><code>why_fit_for_role(role_description)</code> &mdash; the one generative tool, grounded only on the CV</li>
+        </ul>
+        <p class="mcp-caveat muted">
+          Public, read-only, no authentication, rate-limited. This demonstrates fluency with the exact protocol this
+          audience ships for a living. It is not a promised recruiting channel: no evidence exists that hiring teams
+          query candidates' personal MCP servers today, and nothing here claims otherwise.
+        </p>
+      </div>
+
       <p class="test-cert muted">Last updated <time datetime={cv.meta.lastUpdated}>{cv.meta.lastUpdated}</time>.</p>
     </div>
   </main>
@@ -128,4 +176,91 @@ const description = `How ${id.displayName} builds software with AI coding agents
     margin: var(--space-2) 0;
     font-size: var(--step--1);
   }
+  .mcp-panel {
+    border: 1px solid var(--hairline);
+    background: var(--tint);
+    padding: var(--space-4) var(--space-5);
+    margin: 0 0 var(--space-5);
+  }
+  .mcp-label {
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    font-size: var(--step--1);
+    color: var(--muted);
+    margin: var(--space-4) 0 var(--space-1);
+  }
+  .mcp-label:first-child {
+    margin-top: 0;
+  }
+  .code-copy {
+    position: relative;
+  }
+  .code-copy pre {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .code-copy code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    color: var(--ink);
+    white-space: pre;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    font: inherit;
+    font-size: 0.72rem;
+    background: var(--paper);
+    color: var(--navy);
+    border: 1px solid var(--hairline);
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover {
+    border-color: var(--navy);
+  }
+  .mcp-tools {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: var(--step--1);
+  }
+  .mcp-tools li {
+    margin: 0.3rem 0;
+  }
+  .mcp-tools code {
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 0.9em;
+    color: var(--ink);
+  }
+  .mcp-caveat {
+    font-size: var(--step--1);
+    margin: var(--space-4) 0 0;
+  }
 </style>
+
+<script is:inline>
+  (function () {
+    // A small, justified exception to the zero-JS default (see PRODUCT.md
+    // principle 5), same category as the print button: copy-to-clipboard has
+    // no non-JS equivalent, degrades to nothing (the text is still selectable
+    // and copyable by hand) if JS is off.
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = document.getElementById(btn.getAttribute('data-copy-target'));
+        if (!target) return;
+        navigator.clipboard.writeText(target.textContent).then(function () {
+          var original = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(function () {
+            btn.textContent = original;
+          }, 1500);
+        });
+      });
+    });
+  })();
+</script>

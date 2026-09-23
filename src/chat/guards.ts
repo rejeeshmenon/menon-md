@@ -96,10 +96,10 @@ export async function hashIp(ip: string, salt: string, now: Date = new Date()): 
     .join('');
 }
 
-/** KV key for the current hourly rate-limit bucket. */
-export function rateLimitKey(ipHash: string, now: Date = new Date()): string {
+/** KV key for the current hourly rate-limit bucket. `prefix` namespaces separate budgets (e.g. chat vs. MCP) in the same KV. */
+export function rateLimitKey(ipHash: string, now: Date = new Date(), prefix = 'rl'): string {
   const bucket = Math.floor(now.getTime() / (LIMITS.rateWindowSeconds * 1000));
-  return `rl:${ipHash}:${bucket}`;
+  return `${prefix}:${ipHash}:${bucket}`;
 }
 
 /** KV key for a Q&A log entry. */
@@ -111,9 +111,12 @@ export function logKey(now: Date = new Date()): string {
   return `log:${now.toISOString()}:${suffix}`;
 }
 
-/** Given the stored count, decide whether this request is allowed and the new count. */
-export function nextRateState(storedCount: string | null): { allowed: boolean; count: number } {
+/** Given the stored count, decide whether this request is allowed and the new count. `limit` defaults to the chat budget; pass a different one for a separate surface (e.g. MCP). */
+export function nextRateState(
+  storedCount: string | null,
+  limit: number = LIMITS.perHour,
+): { allowed: boolean; count: number } {
   const current = storedCount ? Number.parseInt(storedCount, 10) || 0 : 0;
-  if (current >= LIMITS.perHour) return { allowed: false, count: current };
+  if (current >= limit) return { allowed: false, count: current };
   return { allowed: true, count: current + 1 };
 }
